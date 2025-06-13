@@ -19,7 +19,6 @@
 }
 
 .marquee_container {
-    --marquee-play-state: running;
     overflow: hidden;
     cursor: grab;
     user-select: none; /* Prevent text selection during drag */
@@ -37,17 +36,17 @@
 .marquee_container .marquee_elements-container {
     animation: marqueeScroll 15s linear infinite;
     will-change: transform;
-    animation-play-state: var(--marquee-play-state, running);
+    animation-play-state: running; /* Always running by default, JS will control pausing */
     transition: animation-play-state 0.3s ease;
     pointer-events: none; /* Prevent interference with drag events */
     flex-shrink: 0; /* Prevent containers from shrinking */
     min-width: 100%; /* Ensure each container takes full width */
 }
 
-/* Enhanced hover behavior */
-.marquee_container:hover {
+/* Remove CSS hover behavior - let JavaScript handle it */
+/* .marquee_container:hover {
     --marquee-play-state: paused;
-}
+} */
 
 /* Smooth transitions when resuming animation */
 .marquee_container .marquee_elements-container.resuming {
@@ -58,10 +57,6 @@
 @media (hover: none) and (pointer: coarse) {
     .marquee_container {
         cursor: default;
-    }
-    
-    .marquee_container:hover {
-        --marquee-play-state: running; /* Don't pause on touch devices hover */
     }
 }
   

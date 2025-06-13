@@ -17,10 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // State management
         let isDragging = false;
+        let isHovered = false;
         let startX = 0;
         let startTransforms = [];
         let animationPaused = false;
-        let dragOffset = 0;
 
         // Helper function to get current transform value
         const getCurrentTransform = (element) => {
@@ -42,18 +42,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     element.style.transform = `translateX(${currentTransform}px)`;
                 });
                 animationPaused = true;
+                console.log('🔄 Animation paused');
             }
         };
 
         // Helper function to resume animation
         const resumeAnimation = () => {
-            if (animationPaused) {
+            if (animationPaused && !isDragging && !isHovered) {
                 scrollElements.forEach(element => {
                     element.style.animationPlayState = 'running';
                     element.style.transform = '';
                 });
                 animationPaused = false;
-                dragOffset = 0;
+                startTransforms = [];
+                console.log('▶️ Animation resumed');
             }
         };
 
@@ -77,8 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const handleMouseMove = (e) => {
             if (!isDragging) return;
             e.preventDefault();
-            const deltaX = (e.pageX - startX) * 1.5; // Multiply for more responsive dragging
-            dragOffset = deltaX;
+            const deltaX = (e.pageX - startX) * 1.5;
             updateDragPositions(deltaX);
         };
 
@@ -87,11 +88,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 isDragging = false;
                 container.style.cursor = 'grab';
                 
-                // Resume animation after a short delay
+                // Resume animation after a short delay if not hovered
                 setTimeout(() => {
-                    if (!container.matches(':hover')) {
-                        resumeAnimation();
-                    }
+                    resumeAnimation();
                 }, 300);
             }
         };
@@ -108,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!isDragging) return;
             e.preventDefault();
             const deltaX = (e.touches[0].pageX - startX) * 1.5;
-            dragOffset = deltaX;
             updateDragPositions(deltaX);
         };
 
@@ -122,16 +120,20 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // Original hover functionality (enhanced)
+        // Hover functionality (cleaned up)
         const handleMouseEnter = () => {
+            isHovered = true;
             if (!isDragging) {
                 pauseAnimation();
             }
         };
 
         const handleMouseLeave = () => {
+            isHovered = false;
             if (!isDragging) {
-                resumeAnimation();
+                setTimeout(() => {
+                    resumeAnimation();
+                }, 100);
             }
         };
 
