@@ -1,0 +1,48 @@
+/* Random Test Styles */
+
+/* Make everything purple with white text */
+* {
+    color: white !important;
+    background-color: purple !important;
+}
+
+/* Add a pulsing animation to all buttons */
+button {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Make all images rotate */
+img {
+    animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Add a rainbow border to all headings */
+h1, h2, h3, h4, h5, h6 {
+    border: 5px solid;
+    border-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet) 1;
+}
+
+/* Make all links blink */
+a {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* Add a wavy underline to all paragraphs */
+p {
+    text-decoration: underline wavy red;
+}
