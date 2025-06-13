@@ -28,4 +28,8 @@ button, .button {
     border-radius: 8px !important;
 }
 
+h1 {
+  outline: 2px solid red; /* Red outline around h1 to easily spot the effect */
+}
+
 /* END TEST STYLES */
