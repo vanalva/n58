@@ -1,8 +1,9 @@
-// Atención Cliente Page JavaScript
+// Atención Cliente Page Functionality
+console.log('✅ atencion-cliente.js loaded');
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize page-specific functionality
-    console.log('Atención Cliente page JavaScript loaded');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔄 Initializing atención cliente page...');
 
-// Add your custom JavaScript below 
+    // Initialize any atención cliente-specific functionality here
+    // Add your custom JavaScript below
+}); 

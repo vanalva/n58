@@ -1,8 +1,9 @@
-// Documentos Template JavaScript
+// Documentos Template Functionality
+console.log('✅ documentos-template.js loaded');
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize template-specific functionality
-    console.log('Documentos template JavaScript loaded');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔄 Initializing documentos template...');
 
-// Add your custom JavaScript below 
+    // Initialize any documentos template-specific functionality here
+    // Add your custom JavaScript below
+}); 

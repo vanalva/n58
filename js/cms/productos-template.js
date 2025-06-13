@@ -1,8 +1,9 @@
-// Productos Template JavaScript
+// Productos Template Functionality
+console.log('✅ productos-template.js loaded');
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize template-specific functionality
-    console.log('Productos template JavaScript loaded');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔄 Initializing productos template...');
 
-// Add your custom JavaScript below 
+    // Initialize any productos template-specific functionality here
+    // Add your custom JavaScript below
+}); 

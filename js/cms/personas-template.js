@@ -1,8 +1,9 @@
-// Personas Template JavaScript
+// Personas Template Functionality
+console.log('✅ personas-template.js loaded');
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize template-specific functionality
-    console.log('Personas template JavaScript loaded');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔄 Initializing personas template...');
 
-// Add your custom JavaScript below 
+    // Initialize any personas template-specific functionality here
+    // Add your custom JavaScript below
+}); 

@@ -1,8 +1,9 @@
-// Reportes Financieros Template JavaScript
+// Reportes Financieros Template Functionality
+console.log('✅ reportes-financieros-template.js loaded');
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize template-specific functionality
-    console.log('Reportes Financieros template JavaScript loaded');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔄 Initializing reportes financieros template...');
 
-// Add your custom JavaScript below 
+    // Initialize any reportes financieros template-specific functionality here
+    // Add your custom JavaScript below
+}); 

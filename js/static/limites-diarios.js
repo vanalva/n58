@@ -1,8 +1,9 @@
-// Límites Diarios Page JavaScript
+// Límites Diarios Page Functionality
+console.log('✅ limites-diarios.js loaded');
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize page-specific functionality
-    console.log('Límites Diarios page JavaScript loaded');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔄 Initializing límites diarios page...');
 
-// Add your custom JavaScript below 
+    // Initialize any límites diarios-specific functionality here
+    // Add your custom JavaScript below
+}); 

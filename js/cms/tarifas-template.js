@@ -1,8 +1,9 @@
-// Tarifas Template JavaScript
+// Tarifas Template Functionality
+console.log('✅ tarifas-template.js loaded');
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize template-specific functionality
-    console.log('Tarifas template JavaScript loaded');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔄 Initializing tarifas template...');
 
-// Add your custom JavaScript below 
+    // Initialize any tarifas template-specific functionality here
+    // Add your custom JavaScript below
+}); 

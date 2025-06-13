@@ -1,8 +1,9 @@
-// Empresas y Productos Page JavaScript
+// Empresas y Productos Page Functionality
+console.log('✅ empresas-productos.js loaded');
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize page-specific functionality
-    console.log('Empresas y Productos page JavaScript loaded');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔄 Initializing empresas y productos page...');
 
-// Add your custom JavaScript below 
+    // Initialize any empresas y productos-specific functionality here
+    // Add your custom JavaScript below
+}); 

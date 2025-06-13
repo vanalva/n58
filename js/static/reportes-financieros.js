@@ -1,8 +1,9 @@
-// Reportes Financieros Page JavaScript
+// Reportes Financieros Page Functionality
+console.log('✅ reportes-financieros.js loaded');
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize page-specific functionality
-    console.log('Reportes Financieros page JavaScript loaded');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔄 Initializing reportes financieros page...');
 
-// Add your custom JavaScript below 
+    // Initialize any reportes financieros-specific functionality here
+    // Add your custom JavaScript below
+}); 

@@ -1,8 +1,9 @@
-// Formulario Reclamos Page JavaScript
+// Formulario Reclamos Page Functionality
+console.log('✅ formulario-reclamos.js loaded');
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize page-specific functionality
-    console.log('Formulario Reclamos page JavaScript loaded');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔄 Initializing formulario reclamos page...');
 
-// Add your custom JavaScript below 
+    // Initialize any formulario reclamos-specific functionality here
+    // Add your custom JavaScript below
+}); 

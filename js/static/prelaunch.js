@@ -1,8 +1,9 @@
-// Prelaunch Page JavaScript
+// Prelaunch Page Functionality
+console.log('✅ prelaunch.js loaded');
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize page-specific functionality
-    console.log('Prelaunch page JavaScript loaded');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔄 Initializing prelaunch page...');
 
-// Add your custom JavaScript below 
+    // Initialize any prelaunch-specific functionality here
+    // Add your custom JavaScript below
+}); 

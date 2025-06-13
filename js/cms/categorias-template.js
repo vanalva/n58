@@ -1,8 +1,9 @@
-// Categorías Template JavaScript
+// Categorías Template Functionality
+console.log('✅ categorias-template.js loaded');
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize template-specific functionality
-    console.log('Categorías template JavaScript loaded');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔄 Initializing categorías template...');
 
-// Add your custom JavaScript below 
+    // Initialize any categorías template-specific functionality here
+    // Add your custom JavaScript below
+}); 

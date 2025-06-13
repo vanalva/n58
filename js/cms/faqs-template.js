@@ -1,8 +1,9 @@
-// FAQs Template JavaScript
+// FAQs Template Functionality
+console.log('✅ faqs-template.js loaded');
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize template-specific functionality
-    console.log('FAQs template JavaScript loaded');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔄 Initializing FAQs template...');
 
-// Add your custom JavaScript below 
+    // Initialize any FAQs template-specific functionality here
+    // Add your custom JavaScript below
+}); 

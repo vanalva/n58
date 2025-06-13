@@ -1,8 +1,9 @@
-// Boletines Informativos Template JavaScript
+// Boletines Informativos Template Functionality
+console.log('✅ boletines-informativos-template.js loaded');
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize template-specific functionality
-    console.log('Boletines Informativos template JavaScript loaded');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔄 Initializing boletines informativos template...');
 
-// Add your custom JavaScript below 
+    // Initialize any boletines informativos template-specific functionality here
+    // Add your custom JavaScript below
+}); 

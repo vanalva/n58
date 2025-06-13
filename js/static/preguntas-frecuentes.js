@@ -1,8 +1,9 @@
-// Preguntas Frecuentes Page JavaScript
+// Preguntas Frecuentes Page Functionality
+console.log('✅ preguntas-frecuentes.js loaded');
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize page-specific functionality
-    console.log('Preguntas Frecuentes page JavaScript loaded');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔄 Initializing preguntas frecuentes page...');
 
-// Add your custom JavaScript below 
+    // Initialize any preguntas frecuentes-specific functionality here
+    // Add your custom JavaScript below
+}); 

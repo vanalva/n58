@@ -1,8 +1,9 @@
-// Calendario Bancario Page JavaScript
+// Calendario Bancario Page Functionality
+console.log('✅ calendario-bancario.js loaded');
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize page-specific functionality
-    console.log('Calendario Bancario page JavaScript loaded');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔄 Initializing calendario bancario page...');
 
-// Add your custom JavaScript below 
+    // Initialize any calendario bancario-specific functionality here
+    // Add your custom JavaScript below
+}); 

@@ -1,8 +1,9 @@
-// Conócenos Page JavaScript
+// Conócenos Page Functionality
+console.log('✅ conocenos.js loaded');
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize page-specific functionality
-    console.log('Conócenos page JavaScript loaded');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔄 Initializing conócenos page...');
 
-// Add your custom JavaScript below 
+    // Initialize any conócenos-specific functionality here
+    // Add your custom JavaScript below
+}); 
