@@ -1,34 +1,105 @@
-/* Global CSS Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* === GLOBAL STYLES === */
+/* Use Webflow Style Panel to define base variables like --oro-negro, --te-quiero-verde, etc. */
 
-/* Utility Classes */
-.container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-/* Responsive Typography */
-html {
-    font-size: 16px;
-}
-
-@media (max-width: 768px) {
-    html {
-        font-size: 14px;
+/* ✅ Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 7px;
+    background: var(--oro-negro);
+  }
+  
+  ::-webkit-scrollbar-track {
+    border-radius: 50px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    border-radius: 50px;
+    background: var(--te-quiero-verde);
+    height: 30% !important;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover,
+  ::-webkit-scrollbar-thumb:active {
+    background: var(--not-barbie-light);
+  }
+  
+  /* ✅ Cursor Fade */
+  .cursor {
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    position: fixed;
+    opacity: 0%;
+  }
+  
+  body:hover .cursor {
+    opacity: 100%;
+  }
+  
+  /* ✅ Fade-Out Animation */
+  .fade-out {
+    animation: fadeOut 1s ease forwards;
+  }
+  
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
     }
-}
-
-/* Common Elements */
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    line-height: 1.6;
-    color: #333;
-}
-
-/* Add your custom styles below */ 
+    to {
+      opacity: 0;
+    }
+  }
+  
+  /* ✅ Notched DIV Element */
+  .notch-div {
+    --slant-size: 45px;
+    --border-width: 2px;
+    border: none;
+    background:
+      linear-gradient(to bottom left, currentColor 50%, transparent 50.1%) top right;
+    background-size: calc(var(--slant-size) + 1.3 * var(--border-width))
+                     calc(var(--slant-size) + 1.3 * var(--border-width));
+    background-repeat: no-repeat;
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--slant-size)) 0,
+      100% var(--slant-size),
+      100% 100%,
+      0% 100%,
+      0% 0%
+    );
+    box-shadow: 0 0 0 var(--border-width) currentColor inset;
+    position: relative;
+  }
+  
+  /* ✅ Notched Image Container */
+  .notch-image {
+    --slant-size: 45px;
+    position: relative;
+    overflow: hidden;
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--slant-size)) 0,
+      100% var(--slant-size),
+      100% 100%,
+      0 100%,
+      0 0
+    );
+  }
+  
+  .notch-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* ✅ Selection Styles */
+  html {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+  
+  ::selection {
+    background-color: rgba(160, 221, 82, 0.6); /* light green */
+    color: var(--oro-negro) !important;
+    mix-blend-mode: multiply;
+  }
+  
