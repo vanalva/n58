@@ -2,3 +2,30 @@
 * {
     color: #ff0000 !important;
 }
+
+/* TEST STYLES - REMOVE AFTER TESTING */
+
+html, body {
+    background: #ffff00 !important; /* bright yellow */
+    font-size: 22px !important; /* larger font */
+}
+
+* {
+    color: #0066ff !important; /* bright blue text */
+}
+
+a {
+    color: #00cc44 !important; /* green links */
+    text-decoration: underline !important;
+}
+
+img {
+    border: 5px solid #ff0000 !important; /* thick red border */
+}
+
+button, .button {
+    box-shadow: 0 0 10px 5px #ff00ff !important; /* magenta shadow */
+    border-radius: 8px !important;
+}
+
+/* END TEST STYLES */
