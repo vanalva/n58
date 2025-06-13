@@ -79,4 +79,70 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   });
+
+  // navbar-scroll-block.js
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("✅ navbar-scroll-block.js loaded");
+  
+    const body = document.body;
+    const navbarTriggers = document.querySelectorAll('.section_main-navbar');
+    const dropdownTriggers = document.querySelectorAll('.dropdown-trigger');
+    let isScrollBlocked = false;
+  
+    function blockScroll() {
+      if (!isScrollBlocked) {
+        window.addEventListener('wheel', preventScroll, { passive: false });
+        window.addEventListener('touchmove', preventScroll, { passive: false });
+        window.addEventListener('keydown', preventScrollKeys, { passive: false });
+        isScrollBlocked = true;
+        console.log("🛑 Scroll blocked");
+      }
+    }
+  
+    function allowScroll() {
+      if (isScrollBlocked) {
+        window.removeEventListener('wheel', preventScroll);
+        window.removeEventListener('touchmove', preventScroll);
+        window.removeEventListener('keydown', preventScrollKeys);
+        isScrollBlocked = false;
+        console.log("✅ Scroll allowed");
+      }
+    }
+  
+    function preventScroll(event) {
+      event.preventDefault();
+    }
+  
+    function preventScrollKeys(event) {
+      const keys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'PageUp', 'PageDown'];
+      if (keys.includes(event.key)) {
+        event.preventDefault();
+      }
+    }
+  
+    // Desktop hover scroll-lock
+    if (window.innerWidth > 1024) {
+      navbarTriggers.forEach(trigger => {
+        trigger.addEventListener('mouseover', blockScroll);
+        trigger.addEventListener('mouseout', allowScroll);
+      });
+    }
+  
+    // Mobile click scroll-lock
+    if (window.innerWidth <= 1024) {
+      dropdownTriggers.forEach(trigger => {
+        trigger.addEventListener('click', (e) => {
+          e.stopPropagation();
+          isScrollBlocked ? allowScroll() : blockScroll();
+        });
+      });
+  
+      // Click outside closes dropdown + enables scroll
+      document.addEventListener('click', (e) => {
+        const inside = e.target.closest('.dropdown-trigger') || e.target.closest('.Main\\ Navbar\\ Dropdown');
+        if (!inside) allowScroll();
+      });
+    }
+  });
+  
   
