@@ -103,3 +103,59 @@
     mix-blend-mode: multiply;
   }
   
+  .button-wrapper {
+    position: relative !important;
+    display: inline-block !important;
+  }
+  
+  [class*="notch-button"] {
+    --slant-size: 15px;
+    --border-width: 2px;
+    --shadow-offset: 5px;
+    border: none;
+    position: relative;
+    padding: 12px 24px;
+    font-size: 16px;
+    background: linear-gradient(to bottom left, currentColor 50%, transparent 50.1%) top right;
+    background-size: calc(var(--slant-size) + 1.3 * var(--border-width)) calc(var(--slant-size) + 1.3 * var(--border-width));
+    background-repeat: no-repeat;
+    clip-path: polygon(0 0, calc(100% - var(--slant-size)) 0, 100% var(--slant-size), 100% 100%, 0% 100%, 0% 0%);
+    box-shadow: 0 0 0 var(--border-width) currentColor inset;
+    transition: transform 0.3s ease, background-color 0.2s ease, color 0.2s ease;
+  }
+  
+  [class*="notch-button-duplicate"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: currentColor !important;
+    transform: translate(0, 0);
+    opacity: 1;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
+  [class*="notch-button"]:hover {
+    transform: translate(-5px, -5px);
+  }
+  
+  [class*="notch-button"]:hover ~ [class*="notch-button-duplicate"] {
+    transform: translate(5px, 5px);
+  }
+  
+  [class*="notch-button"]:active {
+    transform: translate(0, 0);
+    transition: transform 0.1s ease;
+  }
+  
+  [class*="notch-button"]:active ~ [class*="notch-button-duplicate"] {
+    transform: translate(0, 0);
+    transition: transform 0.1s ease;
+  }
+  
+  .button-wrapper [class*="notch-button"] {
+    color: inherit;
+  }
+  
