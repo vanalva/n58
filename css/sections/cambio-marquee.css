@@ -1,24 +1,24 @@
-/* Style for marquee section */
+/* Enhanced Marquee Section with Drag Support (Infinite Loop) */
 .marquee_dynamic-container {
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-  }
-  
-  .marquee_dynamic-text {
+}
+
+.marquee_dynamic-text {
     white-space: nowrap;
     font-weight: 100;
     line-height: 1;
-  }
-  
-  @keyframes marqueeScroll {
+}
+
+@keyframes marqueeScroll {
     to {
-      transform: translateX(-100%);
+        transform: translateX(-100%);
     }
-  }
-  
-  .marquee_container {
+}
+
+.marquee_container {
     --marquee-play-state: running;
     overflow: hidden;
     cursor: grab;
@@ -27,37 +27,41 @@
     -moz-user-select: none;
     -ms-user-select: none;
     touch-action: pan-x; /* Allow horizontal panning on touch devices */
-  }
-  
-  .marquee_container:active {
+    display: flex; /* Ensure containers are side by side */
+}
+
+.marquee_container:active {
     cursor: grabbing;
-  }
-  
-  .marquee_container .marquee_elements-container {
+}
+
+.marquee_container .marquee_elements-container {
     animation: marqueeScroll 15s linear infinite;
     will-change: transform;
     animation-play-state: var(--marquee-play-state, running);
     transition: animation-play-state 0.3s ease;
     pointer-events: none; /* Prevent interference with drag events */
-  }
-  
-  .marquee_container:hover {
+    flex-shrink: 0; /* Prevent containers from shrinking */
+    min-width: 100%; /* Ensure each container takes full width */
+}
+
+/* Enhanced hover behavior */
+.marquee_container:hover {
     --marquee-play-state: paused;
-  }
-  
-  /* Smooth transitions when resuming animation */
-  .marquee_container .marquee_elements-container.resuming {
+}
+
+/* Smooth transitions when resuming animation */
+.marquee_container .marquee_elements-container.resuming {
     transition: transform 0.5s ease-out;
-  }
-  
-  /* Touch device optimizations */
-  @media (hover: none) and (pointer: coarse) {
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
     .marquee_container {
-      cursor: default;
+        cursor: default;
     }
     
     .marquee_container:hover {
-      --marquee-play-state: running; /* Don't pause on touch devices hover */
+        --marquee-play-state: running; /* Don't pause on touch devices hover */
     }
-  }
+}
   
