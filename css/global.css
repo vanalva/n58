@@ -38,6 +38,7 @@
   /* ✅ Fade-Out Animation */
   .fade-out {
     animation: fadeOut 1s ease forwards;
+    will-change: opacity;
   }
   
   @keyframes fadeOut {
