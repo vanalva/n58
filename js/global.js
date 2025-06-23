@@ -1,7 +1,5 @@
 /* global.js — loaded on all pages */
 document.addEventListener('DOMContentLoaded', function () {
-    console.log("✅ global.js loaded");
-    
     initCustomCursor();
     initNotchButtons();
     initNavbarScrollBlock();
@@ -52,8 +50,6 @@ function initNotchButtons() {
         clone.classList.remove('notch-button');
         clone.classList.add('notch-button-duplicate');
         wrapper.appendChild(clone);
-  
-        console.log(`🌀 Cloned notch-button ${index + 1}`);
       }
     });
 }
@@ -70,7 +66,6 @@ function initNavbarScrollBlock() {
         window.addEventListener('touchmove', preventScroll, { passive: false });
         window.addEventListener('keydown', preventScrollKeys, { passive: false });
         isScrollBlocked = true;
-        console.log("🛑 Scroll blocked");
       }
     }
   
@@ -80,7 +75,6 @@ function initNavbarScrollBlock() {
         window.removeEventListener('touchmove', preventScroll);
         window.removeEventListener('keydown', preventScrollKeys);
         isScrollBlocked = false;
-        console.log("✅ Scroll allowed");
       }
     }
   

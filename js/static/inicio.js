@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const url = 'https://bcv-api.vanalva.com/';
-  console.log('✅ inicio.js loaded – fetching from:', url);
 
   const displayError = (message) => {
     document.querySelectorAll('[data-bcv]').forEach(el => {
