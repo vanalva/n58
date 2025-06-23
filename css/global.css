@@ -158,4 +158,15 @@
   .button-wrapper [class*="notch-button"] {
     color: inherit;
   }
-  
+
+/* Parent doesn't receive clicks */
+.notch-outline {
+  pointer-events: none  !important;
+}
+
+  .fixed_buttons {
+    pointer-events: none;
+  }
+  .fixed_buttons > * {
+    pointer-events: auto;
+  }

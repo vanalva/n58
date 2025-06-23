@@ -60,3 +60,83 @@ document.addEventListener('DOMContentLoaded', async () => {
     displayError('Connection Error');
   }
 });
+
+
+  document.addEventListener("DOMContentLoaded", function () {
+    let isScrollBlocked = false;
+
+    const isMobile = () => window.innerWidth <= 767;
+
+    function blockScroll() {
+      if (isScrollBlocked) return;
+      document.body.style.overflow = "hidden";
+      isScrollBlocked = true;
+    }
+
+    function allowScroll() {
+      if (!isScrollBlocked) return;
+      document.body.style.overflow = "";
+      isScrollBlocked = false;
+    }
+
+    document.addEventListener("click", function (e) {
+      const el = e.target.closest("[chatbot-no-scroll]");
+      if (!el) return;
+
+      const action = el.getAttribute("chatbot-no-scroll");
+
+      if (action === "open" && isMobile()) {
+        blockScroll();
+      }
+
+      if (action === "close") {
+        allowScroll();
+      }
+    });
+
+    window.addEventListener("resize", () => {
+      if (!isMobile()) {
+        allowScroll();
+      }
+    });
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const fixedButtons = document.querySelector(".fixed-buttons");
+
+    if (!fixedButtons) return;
+
+    const isDesktop = () => window.innerWidth >= 992;
+    let wasDragged = false;
+    let scrollTimeout;
+
+    // Only activate on desktop
+    if (isDesktop()) {
+      Draggable.create(fixedButtons, {
+        type: "x,y",
+        bounds: window,
+        inertia: true,
+        onDragStart: function () {
+          wasDragged = true;
+        }
+      });
+
+      window.addEventListener("scroll", function () {
+        if (!wasDragged || scrollTimeout) return;
+
+        scrollTimeout = setTimeout(() => {
+          gsap.to(fixedButtons, {
+            x: 0,
+            y: 0,
+            duration: 0.4,
+            ease: "power2.out",
+            onComplete: () => {
+              wasDragged = false;
+            }
+          });
+          scrollTimeout = null;
+        }, 50);
+      });
+    }
+  });
+
