@@ -20,54 +20,7 @@ function initCustomCursor() {
       const throttledMouseMove = throttle(cursorMove, 16); // 60fps
       window.addEventListener('mousemove', throttledMouseMove);
   
-      // Stick cursor to hovered elements
-      const stickSelectors = ".to-the-bottom, .nav-link, .servicios-item-icon, .button, .cursor-stick, .link";
-  
-      document.querySelectorAll(stickSelectors).forEach(el => {
-          el.addEventListener('mouseenter', function() {
-              window.removeEventListener("mousemove", throttledMouseMove);
-  
-              const tricksWidth = this.offsetWidth / 2;
-              const tricksHeight = this.offsetHeight / 2;
-              const tricksTop = this.getBoundingClientRect().top + window.scrollY;
-              const tricksLeft = this.getBoundingClientRect().left;
-  
-              tricksCursor.style.top = `${tricksTop + tricksHeight}px`;
-              tricksCursor.style.left = `${tricksLeft + tricksWidth}px`;
-          });
-  
-          el.addEventListener('mouseleave', function() {
-              window.addEventListener("mousemove", throttledMouseMove);
-          });
-      });
-  
-      // Focus effects
-      document.querySelectorAll(".cursor-stick").forEach(el => {
-          el.addEventListener("mouseenter", function() {
-              tricksCursor.classList.add('cursor-focus');
-          });
-          el.addEventListener("mouseleave", function() {
-              tricksCursor.classList.remove('cursor-focus');
-          });
-      });
-  
-      // Adaptive width (for elements like code blocks or buttons)
-      document.querySelectorAll('.cursor-adapt').forEach(element => {
-        element.addEventListener('mouseover', () => {
-          const { width } = element.getBoundingClientRect();
-          const cursorElement = document.querySelector('.cursor-code');
-          if (cursorElement) {
-            cursorElement.style.width = `${width}px`;
-          }
-        });
-  
-        element.addEventListener('mouseout', () => {
-          const cursorElement = document.querySelector('.cursor-code');
-          if (cursorElement) {
-            cursorElement.style.width = '';
-          }
-        });
-      });
+     
     }
 }
 
