@@ -108,58 +108,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const isDesktop = () => window.innerWidth >= 992;
   let wasDragged = false;
-  let scrollTimeout;
-  let originalPosition = { x: 0, y: 0 };
 
   // Only activate on desktop
   if (isDesktop()) {
-    // Store original position
-    const rect = fixedButtons.getBoundingClientRect();
-    originalPosition = { x: rect.left, y: rect.top };
-
     Draggable.create(fixedButtons, {
       type: "x,y",
       bounds: window,
-      inertia: true,
       onDragStart: function () {
         wasDragged = true;
-        // Ensure element is visible when dragging starts
-        fixedButtons.style.display = 'block';
-        fixedButtons.style.opacity = '1';
-        fixedButtons.style.visibility = 'visible';
-      },
-      onDrag: function () {
-        // Keep element visible during drag
-        fixedButtons.style.display = 'block';
-        fixedButtons.style.opacity = '1';
-        fixedButtons.style.visibility = 'visible';
       }
     });
 
     window.addEventListener("scroll", function () {
-      if (!wasDragged || scrollTimeout) return;
-
-      scrollTimeout = setTimeout(() => {
-        // Ensure element is visible before animating back
-        fixedButtons.style.display = 'block';
-        fixedButtons.style.opacity = '1';
-        fixedButtons.style.visibility = 'visible';
-        
+      if (wasDragged) {
         gsap.to(fixedButtons, {
           x: 0,
           y: 0,
-          duration: 0.4,
+          duration: 0.3,
           ease: "power2.out",
           onComplete: () => {
             wasDragged = false;
-            // Let Webflow handle visibility after animation
-            fixedButtons.style.display = '';
-            fixedButtons.style.opacity = '';
-            fixedButtons.style.visibility = '';
           }
         });
-        scrollTimeout = null;
-      }, 50);
+      }
     });
   }
 });
