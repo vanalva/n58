@@ -7,19 +7,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function initCustomCursor() {
     const tricksCursor = document.querySelector('.cursor');
+    if (!tricksCursor) return;
+    
+    // Cache selectors
+    const stickElements = document.querySelectorAll(".to-the-bottom, .nav-link, .servicios-item-icon, .button, .cursor-stick, .link");
+    const cursorStickElements = document.querySelectorAll(".cursor-stick");
+    const cursorAdaptElements = document.querySelectorAll('.cursor-adapt');
+    const cursorCodeElement = document.querySelector('.cursor-code');
   
-    if (tricksCursor) {
-      const cursorMove = (e) => {
-        tricksCursor.style.top = `${e.clientY}px`;
-        tricksCursor.style.left = `${e.clientX}px`;
-      };
-  
-      // Throttle mousemove events
-      const throttledMouseMove = throttle(cursorMove, 16); // 60fps
-      window.addEventListener('mousemove', throttledMouseMove);
-  
-     
-    }
+    const cursorMove = (e) => {
+      tricksCursor.style.top = `${e.clientY}px`;
+      tricksCursor.style.left = `${e.clientX}px`;
+    };
+
+    // Throttle mousemove events
+    const throttledMouseMove = throttle(cursorMove, 16); // 60fps
+    window.addEventListener('mousemove', throttledMouseMove);
 }
 
 function throttle(func, limit) {
@@ -36,6 +39,7 @@ function throttle(func, limit) {
 }
 
 function initNotchButtons() {
+    // Cache the querySelectorAll result
     const buttons = document.querySelectorAll('.notch-button');
   
     buttons.forEach((button, index) => {
