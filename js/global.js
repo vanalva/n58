@@ -21,21 +21,21 @@ function initCustomCursor() {
     };
 
     // Throttle mousemove events
-    const throttledMouseMove = throttle(cursorMove, 16); // 60fps
+    const throttledMouseMove = throttle(cursorMove);
     window.addEventListener('mousemove', throttledMouseMove);
 }
 
-function throttle(func, limit) {
-    let inThrottle;
+function throttle(func) {
+    let ticking = false;
     return function() {
-        const args = arguments;
-        const context = this;
-        if (!inThrottle) {
-            func.apply(context, args);
-            inThrottle = true;
-            setTimeout(() => inThrottle = false, limit);
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                func.apply(this, arguments);
+                ticking = false;
+            });
+            ticking = true;
         }
-    }
+    };
 }
 
 function initNotchButtons() {
