@@ -112,14 +112,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Only activate on desktop
     if (isDesktop()) {
-      Draggable.create(fixedButtons, {
-        type: "x,y",
-        bounds: window,
-        inertia: true,
-        onDragStart: function () {
-          wasDragged = true;
-        }
-      });
+      // Draggable.create(fixedButtons, {
+      //   type: "x,y",
+      //   bounds: window,
+      //   inertia: true,
+      //   onDragStart: function () {
+      //     wasDragged = true;
+      //   }
+      // });
 
       window.addEventListener("scroll", function () {
         if (!wasDragged || scrollTimeout) return;
