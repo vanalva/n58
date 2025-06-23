@@ -1,8 +1,13 @@
 /* global.js — loaded on all pages */
 document.addEventListener('DOMContentLoaded', function () {
     console.log("✅ global.js loaded");
-  
-    /* === Custom Cursor === */
+    
+    initCustomCursor();
+    initNotchButtons();
+    initNavbarScrollBlock();
+});
+
+function initCustomCursor() {
     const tricksCursor = document.querySelector('.cursor');
   
     if (tricksCursor) {
@@ -11,33 +16,39 @@ document.addEventListener('DOMContentLoaded', function () {
         tricksCursor.style.left = `${e.clientX}px`;
       };
   
-      // Default tracking
-      window.addEventListener('mousemove', cursorMove);
+      // Throttle mousemove events
+      const throttledMouseMove = throttle(cursorMove, 16); // 60fps
+      window.addEventListener('mousemove', throttledMouseMove, { passive: true });
   
       // Stick cursor to hovered elements
       const stickSelectors = ".to-the-bottom, .nav-link, .servicios-item-icon, .button, .cursor-stick, .link";
   
-      $(stickSelectors).mouseenter(function () {
-        window.removeEventListener("mousemove", cursorMove);
+      document.querySelectorAll(stickSelectors).forEach(el => {
+          el.addEventListener('mouseenter', function() {
+              window.removeEventListener("mousemove", throttledMouseMove);
   
-        const tricksWidth = $(this).outerWidth() / 2;
-        const tricksHeight = $(this).outerHeight() / 2;
-        const tricksTop = $(this).offset().top - $(document).scrollTop();
-        const tricksLeft = $(this).offset().left;
+              const tricksWidth = this.offsetWidth / 2;
+              const tricksHeight = this.offsetHeight / 2;
+              const tricksTop = this.getBoundingClientRect().top + window.scrollY;
+              const tricksLeft = this.getBoundingClientRect().left;
   
-        tricksCursor.style.top = `${tricksTop + tricksHeight}px`;
-        tricksCursor.style.left = `${tricksLeft + tricksWidth}px`;
-      });
+              tricksCursor.style.top = `${tricksTop + tricksHeight}px`;
+              tricksCursor.style.left = `${tricksLeft + tricksWidth}px`;
+          });
   
-      $(stickSelectors).mouseleave(function () {
-        window.addEventListener("mousemove", cursorMove);
+          el.addEventListener('mouseleave', function() {
+              window.addEventListener("mousemove", throttledMouseMove, { passive: true });
+          });
       });
   
       // Focus effects
-      $(".cursor-stick").on("mouseenter", function () {
-        $('.cursor').addClass('cursor-focus');
-      }).on("mouseleave", function () {
-        $('.cursor').removeClass('cursor-focus');
+      document.querySelectorAll(".cursor-stick").forEach(el => {
+          el.addEventListener("mouseenter", function() {
+              tricksCursor.classList.add('cursor-focus');
+          });
+          el.addEventListener("mouseleave", function() {
+              tricksCursor.classList.remove('cursor-focus');
+          });
       });
   
       // Adaptive width (for elements like code blocks or buttons)
@@ -58,8 +69,22 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       });
     }
-  
-    /* === Notch Button Duplicate === */
+}
+
+function throttle(func, limit) {
+    let inThrottle;
+    return function() {
+        const args = arguments;
+        const context = this;
+        if (!inThrottle) {
+            func.apply(context, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    }
+}
+
+function initNotchButtons() {
     const buttons = document.querySelectorAll('.notch-button');
   
     buttons.forEach((button, index) => {
@@ -78,12 +103,9 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log(`🌀 Cloned notch-button ${index + 1}`);
       }
     });
-  });
+}
 
-  // navbar-scroll-block.js
-document.addEventListener('DOMContentLoaded', () => {
-    console.log("✅ navbar-scroll-block.js loaded");
-  
+function initNavbarScrollBlock() {
     const body = document.body;
     const navbarTriggers = document.querySelectorAll('.section_main-navbar');
     const dropdownTriggers = document.querySelectorAll('.dropdown-trigger');
@@ -139,10 +161,10 @@ document.addEventListener('DOMContentLoaded', () => {
   
       // Click outside closes dropdown + enables scroll
       document.addEventListener('click', (e) => {
-        const inside = e.target.closest('.dropdown-trigger') || e.target.closest('.Main\\ Navbar\\ Dropdown');
+        const inside = e.target.closest('.dropdown-trigger') || e.target.closest('.Main\ Navbar\ Dropdown');
         if (!inside) allowScroll();
       });
     }
-  });
+}
   
   
