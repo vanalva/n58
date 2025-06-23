@@ -107,25 +107,12 @@ document.addEventListener("DOMContentLoaded", function () {
   if (!fixedButtons) return;
 
   const isDesktop = () => window.innerWidth >= 992;
-  let wasDragged = false;
 
   // Only activate on desktop
   if (isDesktop()) {
     Draggable.create(fixedButtons, {
       type: "x,y",
-      bounds: window,
-      onDragStart: function () {
-        wasDragged = true;
-      }
-    });
-
-    window.addEventListener("scroll", function () {
-      if (wasDragged) {
-        gsap.set(fixedButtons, {
-          clearProps: "x,y"
-        });
-        wasDragged = false;
-      }
+      bounds: window
     });
   }
 });
