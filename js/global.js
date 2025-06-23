@@ -84,16 +84,19 @@ function initNavbarScrollBlock() {
       }
     }
   
-    function preventScroll(event) {
-      event.preventDefault();
-    }
+    // Cache event handlers to avoid recreating them
+    const preventScroll = (event) => event.preventDefault();
+    const preventScrollKeys = (event) => {
+        const keys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'PageUp', 'PageDown'];
+        if (keys.includes(event.key)) {
+            event.preventDefault();
+        }
+    };
   
-    function preventScrollKeys(event) {
-      const keys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'PageUp', 'PageDown'];
-      if (keys.includes(event.key)) {
-        event.preventDefault();
-      }
-    }
+    // Cache options objects
+    const wheelOptions = { passive: false };
+    const touchOptions = { passive: false };
+    const keyOptions = { passive: false };
   
     // Desktop hover scroll-lock
     if (window.innerWidth > 1024) {
