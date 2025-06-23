@@ -101,19 +101,39 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
-document.addEventListener("DOMContentLoaded", function () {
-  const fixedButtons = document.querySelector(".fixed-buttons");
 
-  if (!fixedButtons) return;
+  document.addEventListener("DOMContentLoaded", function () {
+    const isDesktop = () => window.innerWidth >= 992;
 
-  const isDesktop = () => window.innerWidth >= 992;
+    if (!isDesktop()) return; // Only activate on desktop
 
-  // Only activate on desktop
-  if (isDesktop()) {
-    Draggable.create(fixedButtons, {
+    let wasDragged = false;
+    let scrollTimeout;
+
+    Draggable.create(".fixed-buttons", {
       type: "x,y",
-      bounds: window
+      bounds: window,
+      inertia: true,
+      onDragStart: function () {
+        wasDragged = true;
+      }
     });
-  }
-});
+
+    window.addEventListener("scroll", function () {
+      if (!wasDragged || scrollTimeout) return;
+
+      scrollTimeout = setTimeout(() => {
+        gsap.to(".fixed-buttons", {
+          x: 0,
+          y: 0,
+          duration: 0.4,
+          ease: "power2.out",
+          onComplete: () => {
+            wasDragged = false;
+          }
+        });
+        scrollTimeout = null;
+      }, 50);
+    });
+  });
 
