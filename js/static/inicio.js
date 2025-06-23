@@ -103,37 +103,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
   document.addEventListener("DOMContentLoaded", function () {
+    const fixedButtons = document.querySelector(".fixed-buttons");
+
+    if (!fixedButtons) return;
+
     const isDesktop = () => window.innerWidth >= 992;
 
-    if (!isDesktop()) return; // Only activate on desktop
-
-    let wasDragged = false;
-    let scrollTimeout;
-
-    Draggable.create(".fixed-buttons", {
-      type: "x,y",
-      bounds: window,
-      inertia: true,
-      onDragStart: function () {
-        wasDragged = true;
-      }
-    });
-
-    window.addEventListener("scroll", function () {
-      if (!wasDragged || scrollTimeout) return;
-
-      scrollTimeout = setTimeout(() => {
-        gsap.to(".fixed-buttons", {
-          x: 0,
-          y: 0,
-          duration: 0.4,
-          ease: "power2.out",
-          onComplete: () => {
-            wasDragged = false;
+    // Only activate on desktop
+    if (isDesktop()) {
+      Draggable.create(fixedButtons, {
+        type: "x,y",
+        bounds: "body",
+        edgeResistance: 0.65,
+        onDrag: function() {
+          // Ensure element stays within viewport
+          const rect = this.target.getBoundingClientRect();
+          if (rect.right < 0 || rect.bottom < 0 || rect.left > window.innerWidth || rect.top > window.innerHeight) {
+            gsap.set(this.target, { x: 0, y: 0 });
           }
-        });
-        scrollTimeout = null;
-      }, 50);
-    });
+        }
+      });
+    }
   });
 
