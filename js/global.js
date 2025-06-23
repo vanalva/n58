@@ -18,7 +18,7 @@ function initCustomCursor() {
   
       // Throttle mousemove events
       const throttledMouseMove = throttle(cursorMove, 16); // 60fps
-      window.addEventListener('mousemove', throttledMouseMove, { passive: true });
+      window.addEventListener('mousemove', throttledMouseMove);
   
       // Stick cursor to hovered elements
       const stickSelectors = ".to-the-bottom, .nav-link, .servicios-item-icon, .button, .cursor-stick, .link";
@@ -37,7 +37,7 @@ function initCustomCursor() {
           });
   
           el.addEventListener('mouseleave', function() {
-              window.addEventListener("mousemove", throttledMouseMove, { passive: true });
+              window.addEventListener("mousemove", throttledMouseMove);
           });
       });
   
