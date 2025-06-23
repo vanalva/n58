@@ -103,6 +103,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   const isDesktop = () => window.innerWidth >= 992;
   let wasDragged = false;
 
+  function debounce(func, wait) {
+    let timeout;
+    return function() {
+      const context = this, args = arguments;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+  }
+
   if (isDesktop()) {
     Draggable.create(fixedButtons, {
       type: "x,y",
@@ -119,12 +128,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
 
-    window.addEventListener("scroll", function() {
+    window.addEventListener("scroll", debounce(function() {
       if (wasDragged) {
         gsap.set(fixedButtons, { clearProps: "x,y" });
         wasDragged = false;
       }
-    });
+    }, 100));
   }
 });
 
