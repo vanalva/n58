@@ -121,15 +121,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     window.addEventListener("scroll", function () {
       if (wasDragged) {
-        gsap.to(fixedButtons, {
-          x: 0,
-          y: 0,
-          duration: 0.3,
-          ease: "power2.out",
-          onComplete: () => {
-            wasDragged = false;
-          }
+        gsap.set(fixedButtons, {
+          clearProps: "x,y"
         });
+        wasDragged = false;
       }
     });
   }
