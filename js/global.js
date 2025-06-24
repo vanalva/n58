@@ -1,4 +1,12 @@
 /* global.js — loaded on all pages */
+
+window.Webflow ||= [];
+window.Webflow.push(() => {
+  requestIdleCallback(() => {
+    Webflow.require('ix2').init();
+  });
+});
+
 document.addEventListener('DOMContentLoaded', function () {
     initCustomCursor();
     initNotchButtons();
