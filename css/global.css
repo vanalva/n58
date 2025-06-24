@@ -1,5 +1,38 @@
 /* === GLOBAL STYLES === */
-/* Use Webflow Style Panel to define base variables like --oro-negro, --te-quiero-verde, etc. */
+
+/* ✅ Nugros Custom Fonts (self-hosted) */
+   @font-face {
+    font-family: 'Nugros';
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+    src: url('https://n58.pages.dev/fonts/Nugros-Regular.woff2') format('woff2');
+  }
+  
+  @font-face {
+    font-family: 'Nugros';
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+    src: url('https://n58.pages.dev/fonts/Nugros-SemiBold.woff2') format('woff2');
+  }
+  
+  @font-face {
+    font-family: 'Nugros';
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+    src: url('https://n58.pages.dev/fonts/Nugros-Bold.woff2') format('woff2');
+  }
+  
+  @font-face {
+    font-family: 'Nugros';
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+    src: url('https://n58.pages.dev/fonts/Nugros-ExtraBold.woff2') format('woff2');
+  }
+  
 
 /* ✅ Custom Scrollbar */
 ::-webkit-scrollbar {
