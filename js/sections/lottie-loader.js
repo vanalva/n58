@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
           path: jsonURL
         });
   
+        // Pause at start or end depending on direction
         anim.addEventListener('complete', () => {
           const direction = anim.playDirection;
           if (direction === 1) {
@@ -41,16 +42,18 @@ document.addEventListener('DOMContentLoaded', () => {
           });
   
           container.addEventListener('mouseleave', () => {
-            const skipFrames = 100; // your original logic
-            const current = anim.currentFrame;
-            const adjusted = Math.min(current + skipFrames, anim.totalFrames - 1);
+            anim.setDirection(1);
   
-            // ✅ Only skip frames if we’re not already near the end
-            if (adjusted > current) {
-              anim.goToAndStop(adjusted, true);
+            // 🧠 If it's stuck at frame 0, bump to frame 1 to force animation to resume
+            if (Math.floor(anim.currentFrame) === 0) {
+              anim.goToAndStop(1, true);
             }
   
-            anim.setDirection(1);
+            // Optional skip logic if you still want it
+            // const skipFrames = 100;
+            // const adjusted = Math.min(anim.currentFrame + skipFrames, anim.totalFrames - 1);
+            // anim.goToAndStop(adjusted, true);
+  
             anim.play();
           });
         }
