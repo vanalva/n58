@@ -1,31 +1,35 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  const trigger = document.querySelector('#chatbot-trigger');
-  const placeholder = document.querySelector('#zapier-chatbot-placeholder');
+  const trigger = document.getElementById('chatbot-trigger');
+  const container = document.getElementById('zapier-chatbot-placeholder');
 
-  if (!trigger || !placeholder) return;
+  if (!trigger || !container) return;
 
-  let isLoaded = false;
+  let iframeLoaded = false;
 
-  const loadChatbot = () => {
-    if (isLoaded) return;
-    const chatbotUrl = trigger.getAttribute('data-chatbot');
-    if (!chatbotUrl) return;
+  const loadIframe = () => {
+    if (iframeLoaded) return;
+
+    const botUrl = trigger.getAttribute('data-chatbot');
+    if (!botUrl) {
+      console.warn('⚠️ Missing data-chatbot attribute on #chatbot-trigger');
+      return;
+    }
 
     const iframe = document.createElement('iframe');
-    iframe.src = chatbotUrl;
-    iframe.style.border = 'none';
+    iframe.src = botUrl;
     iframe.width = '100%';
     iframe.height = '100%';
     iframe.allow = 'clipboard-write *';
+    iframe.style.border = 'none';
     iframe.classList.add('no-scroll-iframe');
 
-    placeholder.appendChild(iframe);
-    isLoaded = true;
+    container.appendChild(iframe);
+    iframeLoaded = true;
   };
 
-  // 🧠 Trigger preload on hover or focus
-  trigger.addEventListener('mouseenter', loadChatbot);
-  trigger.addEventListener('focus', loadChatbot); // for keyboard nav
+  // ✅ Load on hover or keyboard focus
+  trigger.addEventListener('mouseenter', loadIframe);
+  trigger.addEventListener('focus', loadIframe);
 });
 </script>
