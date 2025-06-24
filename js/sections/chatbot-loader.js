@@ -1,30 +1,31 @@
+<script>
 document.addEventListener('DOMContentLoaded', () => {
-    const trigger = document.getElementById('chatbot-trigger');
-    const container = document.getElementById('zapier-chatbot-placeholder');
-  
-    if (!trigger || !container) return;
-  
-    let iframeLoaded = false;
-  
-    trigger.addEventListener('click', () => {
-      if (iframeLoaded) return;
-  
-      const botUrl = trigger.getAttribute('data-chatbot');
-      if (!botUrl) {
-        console.warn('⚠️ Missing data-chatbot attribute on #chatbot-trigger');
-        return;
-      }
-  
-      const iframe = document.createElement('iframe');
-      iframe.src = botUrl;
-      iframe.width = '100%';
-      iframe.height = '100%';
-      iframe.allow = 'clipboard-write *';
-      iframe.style.border = 'none';
-      iframe.classList.add('no-scroll-iframe');
-  
-      container.appendChild(iframe);
-      iframeLoaded = true;
-    });
-  });
-  
+  const trigger = document.querySelector('#chatbot-trigger');
+  const placeholder = document.querySelector('#zapier-chatbot-placeholder');
+
+  if (!trigger || !placeholder) return;
+
+  let isLoaded = false;
+
+  const loadChatbot = () => {
+    if (isLoaded) return;
+    const chatbotUrl = trigger.getAttribute('data-chatbot');
+    if (!chatbotUrl) return;
+
+    const iframe = document.createElement('iframe');
+    iframe.src = chatbotUrl;
+    iframe.style.border = 'none';
+    iframe.width = '100%';
+    iframe.height = '100%';
+    iframe.allow = 'clipboard-write *';
+    iframe.classList.add('no-scroll-iframe');
+
+    placeholder.appendChild(iframe);
+    isLoaded = true;
+  };
+
+  // 🧠 Trigger preload on hover or focus
+  trigger.addEventListener('mouseenter', loadChatbot);
+  trigger.addEventListener('focus', loadChatbot); // for keyboard nav
+});
+</script>
