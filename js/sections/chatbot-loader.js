@@ -28,14 +28,14 @@ document.addEventListener('DOMContentLoaded', () => {
     iframeLoaded = true;
   };
 
-  // ✅ Smart load: idle or timeout after 4 seconds
+  // ⏱️ Automatically load after delay
   if ('requestIdleCallback' in window) {
-    requestIdleCallback(loadIframe, { timeout: 4000 });
+    requestIdleCallback(loadIframe);
   } else {
     setTimeout(loadIframe, 4000);
   }
 
-  // ✅ Fallback: User clicks before idle or timeout
+  // 🖱️ Fallback: Load immediately if user clicks early
   trigger.addEventListener('click', loadIframe);
 });
 </script>
