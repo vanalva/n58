@@ -20,38 +20,37 @@ document.addEventListener('DOMContentLoaded', () => {
         const anim = window.lottie.loadAnimation({
           container: container,
           renderer: 'svg',
-          loop: false, // Play once on load
+          loop: false,
           autoplay: true,
           path: jsonURL
         });
   
-        // When animation finishes, pause at last frame
         anim.addEventListener('complete', () => {
-            const direction = anim.playDirection;
-            if (direction === 1) {
-              anim.goToAndStop(anim.totalFrames - 1, true); // Stop at end (normal flow)
-            } else {
-              anim.goToAndStop(0, true); // Stop at beginning (after reverse)
-            }
-          });
-          
+          const direction = anim.playDirection;
+          if (direction === 1) {
+            anim.goToAndStop(anim.totalFrames - 1, true);
+          } else {
+            anim.goToAndStop(0, true);
+          }
+        });
   
-        // Apply special hover behavior to navbar logo
         if (container.classList.contains('lottie-logo')) {
           container.addEventListener('mouseenter', () => {
-            anim.setDirection(-1); // reverse
+            anim.setDirection(-1);
             anim.play();
           });
   
           container.addEventListener('mouseleave', () => {
-            anim.setDirection(1); // forward
-            
-            // Skip past dead frames if needed
-            const skipFrames = 100; // tweak this number if needed
+            const skipFrames = 100; // your original logic
             const current = anim.currentFrame;
             const adjusted = Math.min(current + skipFrames, anim.totalFrames - 1);
-            anim.goToAndStop(adjusted, true);
   
+            // ✅ Only skip frames if we’re not already near the end
+            if (adjusted > current) {
+              anim.goToAndStop(adjusted, true);
+            }
+  
+            anim.setDirection(1);
             anim.play();
           });
         }
@@ -70,4 +69,4 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(lazyLoadLotties, 1200);
     }
   });
-  // Test for git q alias
+  
