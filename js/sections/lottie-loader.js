@@ -20,24 +20,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const anim = window.lottie.loadAnimation({
           container: container,
           renderer: 'svg',
-          loop: false, // 👈 Only play once on load
+          loop: false, // Play once on load
           autoplay: true,
           path: jsonURL
         });
   
+        // When animation finishes, pause at last frame
         anim.addEventListener('complete', () => {
-          anim.pause(); // ⏸ Pause at the end of first loop
+          anim.goToAndStop(anim.totalFrames - 1, true); // force stop at visual end
         });
   
-        // Add hover interactions for logos
+        // Apply special hover behavior to navbar logo
         if (container.classList.contains('lottie-logo')) {
           container.addEventListener('mouseenter', () => {
-            anim.setDirection(-1); // 👈 Reverse
+            anim.setDirection(-1); // reverse
             anim.play();
           });
   
           container.addEventListener('mouseleave', () => {
-            anim.setDirection(1); // ▶️ Forward again
+            anim.setDirection(1); // forward
+            
+            // Skip past dead frames if needed
+            const skipFrames = 10; // tweak this number if needed
+            const current = anim.currentFrame;
+            const adjusted = Math.min(current + skipFrames, anim.totalFrames - 1);
+            anim.goToAndStop(adjusted, true);
+  
             anim.play();
           });
         }
