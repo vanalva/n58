@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const splineContainers = document.querySelectorAll('[data-spline]');
     if (!splineContainers.length) return;
   
-    // Step 1: Load the viewer script
+    // Step 1: Load the Spline Web Component script
     const loadSplineViewerScript = () => {
       return new Promise((resolve) => {
         const script = document.createElement('script');
@@ -13,27 +13,33 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     };
   
-    // Step 2: Inject spline-viewers after script loads
-    const loadSplines = () => {
-      loadSplineViewerScript().then(() => {
-        splineContainers.forEach(container => {
-          const sceneURL = container.getAttribute('data-spline');
-          if (!sceneURL) return;
+    // Step 2: Inject each spline-viewer element dynamically
+    const injectSplineScenes = () => {
+      splineContainers.forEach(container => {
+        const sceneURL = container.getAttribute('data-spline');
+        if (!sceneURL) return;
   
-          container.innerHTML = `
-            <spline-viewer
-              url="${sceneURL}"
-              style="width: 100%; height: 100%; display: block;"></spline-viewer>
-          `;
-        });
+        const viewer = document.createElement('spline-viewer');
+        viewer.setAttribute('url', sceneURL);
+        viewer.style.width = '100%';
+        viewer.style.height = '100%';
+        viewer.style.display = 'block';
+  
+        container.appendChild(viewer);
       });
     };
   
-    // Step 3: Defer until browser is idle
+    // Step 3: Lazy load after idle
+    const lazyLoadSplines = () => {
+      loadSplineViewerScript().then(() => {
+        injectSplineScenes();
+      });
+    };
+  
     if ('requestIdleCallback' in window) {
-      requestIdleCallback(loadSplines);
+      requestIdleCallback(lazyLoadSplines);
     } else {
-      setTimeout(loadSplines, 1200);
+      setTimeout(lazyLoadSplines, 1200);
     }
   });
   
