@@ -17,13 +17,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const jsonURL = container.getAttribute('data-lottie');
         if (!jsonURL) return;
   
-        window.lottie.loadAnimation({
+        const anim = window.lottie.loadAnimation({
           container: container,
           renderer: 'svg',
-          loop: true,
+          loop: false, // 👈 Only play once on load
           autoplay: true,
           path: jsonURL
         });
+  
+        anim.addEventListener('complete', () => {
+          anim.pause(); // ⏸ Pause at the end of first loop
+        });
+  
+        // Add hover interactions for logos
+        if (container.classList.contains('lottie-logo')) {
+          container.addEventListener('mouseenter', () => {
+            anim.setDirection(-1); // 👈 Reverse
+            anim.play();
+          });
+  
+          container.addEventListener('mouseleave', () => {
+            anim.setDirection(1); // ▶️ Forward again
+            anim.play();
+          });
+        }
       });
     };
   
