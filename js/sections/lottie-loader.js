@@ -27,8 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
   
         // When animation finishes, pause at last frame
         anim.addEventListener('complete', () => {
-          anim.goToAndStop(anim.totalFrames - 1, true); // force stop at visual end
-        });
+            const direction = anim.playDirection;
+            if (direction === 1) {
+              anim.goToAndStop(anim.totalFrames - 1, true); // Stop at end (normal flow)
+            } else {
+              anim.goToAndStop(0, true); // Stop at beginning (after reverse)
+            }
+          });
+          
   
         // Apply special hover behavior to navbar logo
         if (container.classList.contains('lottie-logo')) {
