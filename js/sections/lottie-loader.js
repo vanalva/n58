@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
     const loadLottieScript = () => {
       return new Promise((resolve) => {
-        if (window.lottie) return resolve();
+        if (window.lottie) return resolve(); // Already loaded
         const script = document.createElement('script');
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.2/lottie.min.js';
         script.onload = resolve;
@@ -36,6 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
   
         if (container.classList.contains('lottie-logo')) {
           container.addEventListener('mouseenter', () => {
+            const skipFrames = 15; // ⏩ Skip past end-idle frames
+            const adjusted = Math.max(anim.currentFrame - skipFrames, 0);
+            anim.goToAndStop(adjusted, true);
+  
             anim.setDirection(-1);
             anim.setSpeed(1); // Normal reverse speed
             anim.play();
@@ -43,8 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
   
           container.addEventListener('mouseleave', () => {
             anim.setDirection(1);
-            anim.setSpeed(1); // Ensure not super fast
-            anim.play();      // Always resume from current frame
+            anim.setSpeed(1); // Ensure normal playback speed
+            anim.play();      // Resume from wherever it stopped
           });
         }
       });
