@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
     const loadLottieScript = () => {
       return new Promise((resolve) => {
-        if (window.lottie) return resolve(); // Already loaded
+        if (window.lottie) return resolve();
         const script = document.createElement('script');
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.2/lottie.min.js';
         script.onload = resolve;
@@ -18,14 +18,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!jsonURL) return;
   
         const anim = window.lottie.loadAnimation({
-          container: container,
+          container,
           renderer: 'svg',
           loop: false,
           autoplay: true,
           path: jsonURL
         });
   
-        // Pause at start or end depending on direction
         anim.addEventListener('complete', () => {
           const direction = anim.playDirection;
           if (direction === 1) {
@@ -38,23 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (container.classList.contains('lottie-logo')) {
           container.addEventListener('mouseenter', () => {
             anim.setDirection(-1);
+            anim.setSpeed(1); // Normal reverse speed
             anim.play();
           });
   
           container.addEventListener('mouseleave', () => {
             anim.setDirection(1);
-  
-            // 🧠 If it's stuck at frame 0, bump to frame 1 to force animation to resume
-            if (Math.floor(anim.currentFrame) === 0) {
-              anim.goToAndStop(1, true);
-            }
-  
-            // Optional skip logic if you still want it
-            // const skipFrames = 100;
-            // const adjusted = Math.min(anim.currentFrame + skipFrames, anim.totalFrames - 1);
-            // anim.goToAndStop(adjusted, true);
-  
-            anim.play();
+            anim.setSpeed(1); // Ensure not super fast
+            anim.play();      // Always resume from current frame
           });
         }
       });
