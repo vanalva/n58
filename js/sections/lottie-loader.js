@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             anim.setDirection(1); // forward
             
             // Skip past dead frames if needed
-            const skipFrames = 50; // tweak this number if needed
+            const skipFrames = 100; // tweak this number if needed
             const current = anim.currentFrame;
             const adjusted = Math.min(current + skipFrames, anim.totalFrames - 1);
             anim.goToAndStop(adjusted, true);
