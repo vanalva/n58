@@ -6,7 +6,7 @@
     font-weight: 400;
     font-style: normal;
     font-display: swap;
-    src: url('https://n58.pages.dev/fonts/Nugros-Regular.woff2') format('woff2');
+    src: url('https://n58.pages.dev/fonts/Nugros-Regular.woff2') format('woff2'), local('Arial');
   }
   
   @font-face {
@@ -14,7 +14,7 @@
     font-weight: 600;
     font-style: normal;
     font-display: swap;
-    src: url('https://n58.pages.dev/fonts/Nugros-SemiBold.woff2') format('woff2');
+    src: url('https://n58.pages.dev/fonts/Nugros-SemiBold.woff2') format('woff2'), local('Arial');
   }
   
   @font-face {
@@ -22,7 +22,7 @@
     font-weight: 700;
     font-style: normal;
     font-display: swap;
-    src: url('https://n58.pages.dev/fonts/Nugros-Bold.woff2') format('woff2');
+    src: url('https://n58.pages.dev/fonts/Nugros-Bold.woff2') format('woff2'), local('Arial');
   }
   
   @font-face {
@@ -30,7 +30,7 @@
     font-weight: 800;
     font-style: normal;
     font-display: swap;
-    src: url('https://n58.pages.dev/fonts/Nugros-ExtraBold.woff2') format('woff2');
+    src: url('https://n58.pages.dev/fonts/Nugros-ExtraBold.woff2') format('woff2'), local('Arial');
   }
   
 
