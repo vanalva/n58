@@ -27,15 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
       iframeLoaded = true;
     };
   
-    const isMobile = window.innerWidth < 768;
-  
-    if (isMobile) {
-      // ⏱️ Mobile: load after 3 seconds
-      setTimeout(loadIframe, 3000);
-    } else {
-      // 🖱️ Desktop: load on hover or focus
-      trigger.addEventListener('mouseenter', loadIframe);
-      trigger.addEventListener('focus', loadIframe);
-    }
+    // 🕒 Load chatbot iframe after 3 seconds everywhere
+    setTimeout(loadIframe, 3000);
   });
   
