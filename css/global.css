@@ -133,7 +133,7 @@
   }
   
   ::selection {
-    background-color: rgba(160, 221, 82, 0.6); /* light green */
+    background: linear-gradient(to right, rgba(160, 221, 82, 0.6), var(--not-barbie-light));
     color: var(--oro-negro) !important;
     mix-blend-mode: multiply;
   }
