@@ -28,5 +28,5 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   
     // ⏱️ Load chatbot after 3 seconds
-    setTimeout(loadIframe, 3000);
+    setTimeout(loadIframe, 5000);
   });
