@@ -1,10 +1,13 @@
 /* global.js — loaded on all pages */
 
+// Import GSAP
+import { gsap } from 'https://cdn.jsdelivr.net/npm/gsap@3.11.3/dist/gsap.min.js';
 
 document.addEventListener('DOMContentLoaded', function () {
     initCustomCursor();
     initNotchButtons();
     initNavbarScrollBlock();
+    initSmoothScroll();
 });
 
 function initCustomCursor() {
@@ -121,6 +124,22 @@ function initNavbarScrollBlock() {
         if (!inside) allowScroll();
       });
     }
+}
+
+// Add smooth scrolling functionality
+function initSmoothScroll() {
+    const links = document.querySelectorAll('a[href^="#"]');
+
+    links.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                gsap.to(window, { duration: 1, scrollTo: target.offsetTop });
+            }
+        });
+    });
 }
   
   
