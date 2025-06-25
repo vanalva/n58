@@ -2,6 +2,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const splineContainers = document.querySelectorAll('[data-spline]');
     if (!splineContainers.length) return;
   
+    // Only load on desktop (width > 1024px)
+    if (window.innerWidth <= 1024) {
+        return;
+    }
+  
     // Step 1: Load the Spline Web Component script
     const loadSplineViewerScript = () => {
       return new Promise((resolve) => {
