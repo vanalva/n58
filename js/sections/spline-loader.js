@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
     // Only load on desktop (width > 1024px)
     if (window.innerWidth <= 1024) {
-        console.log('Spline loader: Skipping on mobile device');
         return;
     }
   
@@ -48,8 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
             // Add loading timeout for individual scenes
             const sceneTimeout = setTimeout(() => {
-                console.warn('Spline scene loading timeout, showing fallback');
-                container.classList.add('spline-fallback');
             }, 10000); // 10 second timeout for scene loading
   
             viewer.addEventListener('load', () => {
@@ -59,7 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
             viewer.addEventListener('error', () => {
                 clearTimeout(sceneTimeout);
-                console.error('Spline scene failed to load, showing fallback');
                 container.classList.add('spline-fallback');
             });
   
@@ -73,7 +69,6 @@ document.addEventListener("DOMContentLoaded", () => {
             await loadSplineViewerScript();
             injectSplineScenes();
         } catch (error) {
-            console.warn('Spline loading failed:', error.message);
             // Add fallback class to all containers
             splineContainers.forEach(container => {
                 container.classList.add('spline-fallback');

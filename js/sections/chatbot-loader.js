@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
   
       const botUrl = trigger.getAttribute('data-chatbot');
       if (!botUrl) {
-        console.warn('⚠️ Missing data-chatbot attribute on #chatbot-trigger');
         return;
       }
   

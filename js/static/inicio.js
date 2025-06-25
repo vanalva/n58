@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const response = await fetch(url);
     if (!response.ok) {
-      console.error('❌ Server error:', response.statusText);
       displayError('Server Error');
       return;
     }
@@ -51,11 +50,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       });
     } else {
-      console.error('❌ JSON error or missing data');
       displayError('Data Error');
     }
   } catch (error) {
-    console.error('❌ Fetch failed:', error);
     displayError('Connection Error');
   }
 

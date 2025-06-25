@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("✅ marquee.js loaded");
-  
     document.querySelectorAll('.marquee_container').forEach(container => {
       const marqueeId = 'marquee_' + Math.random().toString(36).substr(2, 9);
       container.dataset.marqueeId = marqueeId;
