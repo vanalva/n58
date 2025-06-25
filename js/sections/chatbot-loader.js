@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
       const botUrl = trigger.getAttribute('data-chatbot');
       if (!botUrl) {
+        console.warn('⚠️ Missing data-chatbot attribute on #chatbot-trigger');
         return;
       }
   
@@ -26,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
       iframeLoaded = true;
     };
   
-    // 🕒 Load chatbot iframe after 3 seconds everywhere
+    // ⏱️ Load chatbot after 3 seconds
     setTimeout(loadIframe, 3000);
   });
-  
