@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
     // Only load on desktop (width > 1024px) and in portrait orientation
     if (window.innerWidth <= 1024 || window.innerHeight < window.innerWidth) {
-        console.log('Spline loader: Skipping on non-desktop or horizontal orientation');
         return;
     }
   
