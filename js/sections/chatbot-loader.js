@@ -1,4 +1,3 @@
-<script>
 document.addEventListener('DOMContentLoaded', () => {
   const trigger = document.getElementById('chatbot-trigger');
   const container = document.getElementById('zapier-chatbot-placeholder');
@@ -38,4 +37,4 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(loadIframe, 4000);
   }
 });
-</script>
+
