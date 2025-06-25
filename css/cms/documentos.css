@@ -1,0 +1,111 @@
+.tabla-tarifario-rtf-embed {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: var(--oro-negro);
+}
+
+.tabla-tarifario-rtf-embed th,
+.tabla-tarifario-rtf-embed td {
+    padding: 16px 12px;
+    border: 2px solid var(--oro-negro);
+    vertical-align: middle;
+}
+
+.tabla-tarifario-rtf-embed th {
+    background-color: var(--oro-negro);
+    color: var(--caldito-de-pollo);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    border-bottom: 3px solid var(--caldito-de-pollo);
+    line-height: 1rem;
+}
+
+.tabla-tarifario-rtf-embed td {
+    background-color: var(--caldito-de-pollo);
+    font-weight: 400;
+}
+
+.tabla-tarifario-rtf-embed tbody tr:nth-child(even):not(.subtitulo-tabla-rtf) td {
+    background-color: var(--caldito-de-pollo-dark);
+}
+
+.tabla-tarifario-rtf-embed td:last-child {
+    text-align: right;
+}
+
+.tabla-tarifario-rtf-embed tr.subtitulo-tabla-rtf td {
+    font-weight: 700;
+    font-size: 0.95rem;
+    background-color: var(--oro-negro);
+    color: var(--caldito-de-pollo);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    text-align: left;
+}
+
+/* 🔁 Responsive tweaks */
+@media screen and (max-width: 768px) {
+    .tabla-tarifario-rtf-embed {
+        font-size: 0.85rem;
+    }
+
+    .tabla-tarifario-rtf-embed th,
+    .tabla-tarifario-rtf-embed td {
+        padding: 12px 8px;
+    }
+
+    .tabla-tarifario-rtf-embed th {
+        font-size: 1rem;
+    }
+
+    .tabla-tarifario-rtf-embed td:last-child {
+        text-align: left;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .tabla-tarifario-rtf-embed {
+        font-size: 0.78rem;
+    }
+
+    .tabla-tarifario-rtf-embed th,
+    .tabla-tarifario-rtf-embed td {
+        padding: 10px 6px;
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .tabla-tarifario-rtf-embed tr {
+        display: block;
+        margin-bottom: 1rem;
+    }
+
+    .tabla-tarifario-rtf-embed thead {
+        display: none;
+    }
+
+    .tabla-tarifario-rtf-embed td::before {
+        content: attr(data-label);
+        display: block;
+        font-weight: 700;
+        margin-bottom: 0.2rem;
+        color: var(--oro-negro);
+    }
+
+    .tabla-tarifario-rtf-embed td:last-child {
+        text-align: left;
+    }
+}
+
+/* Prevent justify inside Rich Text list items */
+.tc-terms_rich-text li {
+    text-align: left !important;
+}
+
+
