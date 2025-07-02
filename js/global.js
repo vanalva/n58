@@ -1,6 +1,4 @@
 /* global.js — loaded on all pages */
-
-
 document.addEventListener('DOMContentLoaded', function () {
     initCustomCursor();
     initNotchButtons();

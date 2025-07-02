@@ -207,3 +207,9 @@
   .fixed_buttons > * {
     pointer-events: auto;
   }
+
+  /* ✅ Spline Container Background Control */
+[data-spline].spline-loaded,
+[data-spline].spline-loaded * {
+  background: none !important;
+}

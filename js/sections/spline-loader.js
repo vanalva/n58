@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
         viewer.style.display = 'block';
   
         container.appendChild(viewer);
+        container.classList.add('spline-loaded');
       });
       splineLoaded = true;
     };
@@ -48,6 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (viewer) {
           container.removeChild(viewer);
         }
+        container.classList.remove('spline-loaded');
       });
       splineLoaded = false;
     };
