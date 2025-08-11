@@ -24,60 +24,63 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     };
   
-    // Step 2: Inject each spline-viewer element dynamically
+    // Step 2: Inject each spline-viewer element dynamically (idempotent)
     const injectSplineScenes = () => {
       splineContainers.forEach(container => {
         const sceneURL = container.getAttribute('data-spline');
         if (!sceneURL) return;
-  
+
+        // Prevent duplicate injections per container
+        if (container.querySelector('spline-viewer')) return;
+
         const viewer = document.createElement('spline-viewer');
         viewer.setAttribute('url', sceneURL);
         viewer.style.width = '100%';
         viewer.style.height = '100%';
         viewer.style.display = 'block';
-  
+
         container.appendChild(viewer);
         container.classList.add('spline-loaded');
       });
       splineLoaded = true;
     };
   
-    // Step 3: Remove Spline content
+    // Step 3: Remove ALL Spline content (not just the first)
     const removeSplineScenes = () => {
       splineContainers.forEach(container => {
-        const viewer = container.querySelector('spline-viewer');
-        if (viewer) {
-          container.removeChild(viewer);
-        }
+        container.querySelectorAll('spline-viewer').forEach(v => v.remove());
         container.classList.remove('spline-loaded');
       });
       splineLoaded = false;
     };
   
-    // Step 4: Lazy load after idle
+    // Step 4: Lazy load after idle (guard against duplicates)
     const lazyLoadSplines = () => {
-      if (!shouldLoadSpline()) return;
-      
+      if (splineLoaded || !shouldLoadSpline()) return;
+
       loadSplineViewerScript().then(() => {
+        if (splineLoaded) return; // double-guard in case multiple callbacks fire
         injectSplineScenes();
       });
     };
   
-    // Step 5: Handle window resize
+    // Step 5: Handle window resize (debounced to reduce spam)
+    let resizeTimeout;
     const handleResize = () => {
-      const shouldLoad = shouldLoadSpline();
-      
-      if (shouldLoad && !splineLoaded) {
-        // Load Spline when resizing to desktop
-        if ('requestIdleCallback' in window) {
-          requestIdleCallback(lazyLoadSplines);
-        } else {
-          setTimeout(lazyLoadSplines, 300);
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        const shouldLoad = shouldLoadSpline();
+
+        if (shouldLoad && !splineLoaded) {
+          if ('requestIdleCallback' in window) {
+            requestIdleCallback(lazyLoadSplines);
+          } else {
+            setTimeout(lazyLoadSplines, 300);
+          }
+        } else if (!shouldLoad && splineLoaded) {
+          removeSplineScenes();
         }
-      } else if (!shouldLoad && splineLoaded) {
-        // Remove Spline when resizing to mobile
-        removeSplineScenes();
-      }
+      }, 150);
     };
   
     // Initial load
