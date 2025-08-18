@@ -1,98 +1,139 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const splineContainers = document.querySelectorAll('[data-spline]');
-    if (!splineContainers.length) return;
-  
-    let splineLoaded = false;
-    let splineScriptLoaded = false;
-  
-    // Check if we should load Spline based on current window size
-    const shouldLoadSpline = () => window.innerWidth > 1024;
-  
-    // Step 1: Load the Spline Web Component script
-    const loadSplineViewerScript = () => {
-      if (splineScriptLoaded) return Promise.resolve();
-      
-      return new Promise((resolve) => {
-        const script = document.createElement('script');
-        script.type = 'module';
-        script.src = 'https://unpkg.com/@splinetool/viewer@1.10.14/build/spline-viewer.js';
-        script.onload = () => {
-          splineScriptLoaded = true;
-          resolve();
-        };
-        document.body.appendChild(script);
-      });
-    };
-  
-    // Step 2: Inject each spline-viewer element dynamically (idempotent)
-    const injectSplineScenes = () => {
-      splineContainers.forEach(container => {
-        const sceneURL = container.getAttribute('data-spline');
-        if (!sceneURL) return;
+  const splineContainers = document.querySelectorAll('[data-spline]');
+  if (!splineContainers.length) return;
 
-        // Prevent duplicate injections per container
-        if (container.querySelector('spline-viewer')) return;
+  let splineScriptLoaded = false;
+  let scriptLoading = null;
 
-        const viewer = document.createElement('spline-viewer');
-        viewer.setAttribute('url', sceneURL);
-        viewer.style.width = '100%';
-        viewer.style.height = '100%';
-        viewer.style.display = 'block';
+  const shouldLoadSpline = () => window.innerWidth > 1024;
 
-        container.appendChild(viewer);
-        container.classList.add('spline-loaded');
-      });
-      splineLoaded = true;
-    };
-  
-    // Step 3: Remove ALL Spline content (not just the first)
-    const removeSplineScenes = () => {
-      splineContainers.forEach(container => {
-        container.querySelectorAll('spline-viewer').forEach(v => v.remove());
-        container.classList.remove('spline-loaded');
-      });
-      splineLoaded = false;
-    };
-  
-    // Step 4: Lazy load after idle (guard against duplicates)
-    const lazyLoadSplines = () => {
-      if (splineLoaded || !shouldLoadSpline()) return;
+  const loadSplineViewerScript = () => {
+    if (splineScriptLoaded) return Promise.resolve();
+    if (scriptLoading) return scriptLoading;
 
-      loadSplineViewerScript().then(() => {
-        if (splineLoaded) return; // double-guard in case multiple callbacks fire
-        injectSplineScenes();
-      });
-    };
-  
-    // Step 5: Handle window resize (debounced to reduce spam)
-    let resizeTimeout;
-    const handleResize = () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        const shouldLoad = shouldLoadSpline();
+    scriptLoading = new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.type = 'module';
+      script.src = 'https://unpkg.com/@splinetool/viewer@1.10.14/build/spline-viewer.js';
+      script.onload = () => {
+        splineScriptLoaded = true;
+        resolve();
+      };
+      document.body.appendChild(script);
+    });
 
-        if (shouldLoad && !splineLoaded) {
-          if ('requestIdleCallback' in window) {
-            requestIdleCallback(lazyLoadSplines);
-          } else {
-            setTimeout(lazyLoadSplines, 300);
-          }
-        } else if (!shouldLoad && splineLoaded) {
-          removeSplineScenes();
-        }
-      }, 150);
-    };
-  
-    // Initial load
-    if (shouldLoadSpline()) {
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(lazyLoadSplines);
-      } else {
-        setTimeout(lazyLoadSplines, 1200);
-      }
+    return scriptLoading;
+  };
+
+  const injectOneSpline = (container) => {
+    if (container.__splineInitialized) return;
+
+    const sceneURL = container.getAttribute('data-spline');
+    if (!sceneURL) return;
+
+    if (container.querySelector('spline-viewer')) {
+      container.__splineInitialized = true;
+      return;
     }
-  
-    // Listen for window resize
-    window.addEventListener('resize', handleResize);
+
+    const viewer = document.createElement('spline-viewer');
+    viewer.setAttribute('url', sceneURL);
+    viewer.style.width = '100%';
+    viewer.style.height = '100%';
+    viewer.style.display = 'block';
+    viewer.classList.add('spline-enter');
+
+    container.appendChild(viewer);
+    container.classList.add('spline-loaded');
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        viewer.classList.add('spline-enter-active');
+        viewer.classList.remove('spline-enter');
+      });
+    });
+
+    container.__splineInitialized = true;
+  };
+
+  const removeAllSplines = () => {
+    splineContainers.forEach(container => {
+      container.querySelectorAll('spline-viewer').forEach(v => v.remove());
+      container.classList.remove('spline-loaded');
+      container.__splineInitialized = false;
+    });
+  };
+
+  const whenReady = new Promise((resolve) => {
+    let resolved = false;
+    const safeResolve = () => {
+      if (resolved) return;
+      resolved = true;
+      resolve();
+    };
+
+    try {
+      const po = new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        if (!entries.length) return;
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(safeResolve, { timeout: 800 });
+        } else {
+          setTimeout(safeResolve, 800);
+        }
+        po.disconnect();
+      });
+      po.observe({ type: 'largest-contentful-paint', buffered: true });
+
+      window.addEventListener('load', () => setTimeout(safeResolve, 1000));
+      setTimeout(safeResolve, 1500);
+    } catch (e) {
+      window.addEventListener('load', () => setTimeout(safeResolve, 1000));
+      setTimeout(safeResolve, 1500);
+    }
   });
+
+  const startForContainer = (container) => {
+    if (!shouldLoadSpline()) return;
+    whenReady.then(() => {
+      const run = () => loadSplineViewerScript().then(() => injectOneSpline(container));
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(run, { timeout: 2000 });
+      } else {
+        setTimeout(run, 300);
+      }
+    });
+  };
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      startForContainer(entry.target);
+      io.unobserve(entry.target);
+    });
+  }, { root: null, rootMargin: '200px 0px', threshold: 0.1 });
+
+  splineContainers.forEach((el) => io.observe(el));
+
+  let resizeTimeout;
+  const handleResize = () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      if (!shouldLoadSpline()) {
+        removeAllSplines();
+        splineContainers.forEach((el) => {
+          try { io.observe(el); } catch (_) {}
+        });
+      } else {
+        splineContainers.forEach((el) => {
+          if (!el.__splineInitialized) {
+            try { io.observe(el); } catch (_) {}
+          }
+        });
+      }
+    }, 150);
+  };
+
+  window.addEventListener('resize', handleResize);
+});
   

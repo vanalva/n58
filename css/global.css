@@ -213,3 +213,19 @@
 [data-spline].spline-loaded * {
   background: none !important;
 }
+
+/* ✅ Spline fade-in from bottom */
+[data-spline] > spline-viewer {
+  will-change: transform, opacity;
+}
+
+[data-spline] > spline-viewer.spline-enter {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+[data-spline] > spline-viewer.spline-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.36s ease, transform 0.36s ease;
+}
