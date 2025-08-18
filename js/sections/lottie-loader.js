@@ -3,11 +3,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!lottieContainers.length) return;
 
   // Tuning knobs
-  const MIN_DELAY_AFTER_LCP_MS = 1200; // extra buffer after LCP
-  const QUIET_WINDOW_MS = 1000;        // require 1s without long tasks
-  const QUIET_TIMEOUT_MS = 6000;       // give up waiting after 6s
-  const STAGGER_MS = 250;              // stagger per element
-  const IO_ROOT_MARGIN = '100px 0px';  // start close to viewport
+  const MIN_DELAY_AFTER_LCP_MS = 400;   // shorter buffer after LCP
+  const QUIET_WINDOW_MS = 500;          // shorter quiet window
+  const QUIET_TIMEOUT_MS = 4000;        // earlier give-up
+  const STAGGER_MS = 120;               // lighter stagger
+  const IO_ROOT_MARGIN = '300px 0px';   // start earlier before viewport
 
   let scriptLoading = null;
 
@@ -31,6 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const jsonURL = container.getAttribute('data-lottie');
     if (!jsonURL) return;
+
+    // Fade-in entrance
+    container.classList.add('lottie-enter');
 
     const anim = window.lottie.loadAnimation({
       container,
@@ -68,6 +71,14 @@ document.addEventListener('DOMContentLoaded', () => {
         anim.play();
       });
     }
+
+    // Trigger transition on next frames
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        container.classList.add('lottie-enter-active');
+        container.classList.remove('lottie-enter');
+      });
+    });
 
     container.__lottieInitialized = true;
   };
