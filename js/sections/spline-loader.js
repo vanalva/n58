@@ -2,6 +2,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const splineContainers = document.querySelectorAll('[data-spline]');
   if (!splineContainers.length) return;
 
+  // Tuning knobs
+  const MIN_DELAY_AFTER_LCP_MS = 1200; // extra buffer after LCP
+  const QUIET_WINDOW_MS = 1000;        // require 1s without long tasks
+  const QUIET_TIMEOUT_MS = 6000;       // give up waiting after 6s
+  const STAGGER_MS = 300;              // stagger per element (a bit heavier than lottie)
+  const IO_ROOT_MARGIN = '100px 0px';  // start close to viewport
+
   let splineScriptLoaded = false;
   let scriptLoading = null;
 
@@ -69,7 +76,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const safeResolve = () => {
       if (resolved) return;
       resolved = true;
-      resolve();
+      // Enforce minimum extra delay after LCP
+      setTimeout(resolve, MIN_DELAY_AFTER_LCP_MS);
     };
 
     try {
@@ -86,12 +94,45 @@ document.addEventListener("DOMContentLoaded", () => {
       po.observe({ type: 'largest-contentful-paint', buffered: true });
 
       window.addEventListener('load', () => setTimeout(safeResolve, 1000));
-      setTimeout(safeResolve, 1500);
+      setTimeout(safeResolve, 2000);
     } catch (e) {
       window.addEventListener('load', () => setTimeout(safeResolve, 1000));
-      setTimeout(safeResolve, 1500);
+      setTimeout(safeResolve, 2000);
     }
   });
+
+  // Wait until the main thread has been quiet for a bit (no long tasks)
+  const waitForMainThreadQuiet = (quietWindowMs = QUIET_WINDOW_MS, timeoutMs = QUIET_TIMEOUT_MS) => {
+    return new Promise((resolve) => {
+      let lastLongTaskAt = performance.now();
+      let po = null;
+      try {
+        po = new PerformanceObserver(() => {
+          lastLongTaskAt = performance.now();
+        });
+        po.observe({ type: 'longtask', buffered: true });
+      } catch (_) {
+        // Long Tasks API not supported; resolve after quietWindowMs
+        setTimeout(resolve, quietWindowMs);
+        return;
+      }
+
+      const interval = setInterval(() => {
+        if (performance.now() - lastLongTaskAt >= quietWindowMs) {
+          clearInterval(interval);
+          clearTimeout(timeout);
+          if (po) po.disconnect();
+          resolve();
+        }
+      }, 200);
+
+      const timeout = setTimeout(() => {
+        clearInterval(interval);
+        if (po) po.disconnect();
+        resolve();
+      }, timeoutMs);
+    });
+  };
 
   const startForContainer = (container) => {
     if (!shouldLoadSpline()) return;
@@ -105,13 +146,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  let initIndex = 0;
   const io = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
-      startForContainer(entry.target);
+      const myIndex = initIndex++;
+      whenReady
+        .then(() => waitForMainThreadQuiet())
+        .then(() => {
+          const run = () => startForContainer(entry.target);
+          setTimeout(run, myIndex * STAGGER_MS);
+        });
       io.unobserve(entry.target);
     });
-  }, { root: null, rootMargin: '200px 0px', threshold: 0.1 });
+  }, { root: null, rootMargin: IO_ROOT_MARGIN, threshold: 0.1 });
 
   splineContainers.forEach((el) => io.observe(el));
 
