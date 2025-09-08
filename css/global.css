@@ -245,3 +245,9 @@
   transform: translateY(0);
   transition: opacity 0.28s ease, transform 0.28s ease;
 }
+
+/* === GLOBAL TEXT OVERRIDE: make all text red and bold === */
+html, body {
+  color: red !important;
+  font-weight: 700 !important;
+}
