@@ -1,0 +1,14 @@
+# Cache CSS files for 1 year (immutable)
+/css/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+# Cache JS files for 1 year (immutable)
+/js/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+# Cache font files for 1 year (immutable)
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
