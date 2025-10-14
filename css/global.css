@@ -244,47 +244,54 @@
 }
 
 #n58-page-loader .loader-logo {
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin-bottom: 2rem;
-  letter-spacing: 0.1em;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 2rem;
+  background-image: url('https://n58.pages.dev/images/n58-logo-white.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 #n58-page-loader .loader-text {
   font-size: 1rem;
   font-weight: 400;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   opacity: 0.8;
   letter-spacing: 0.05em;
 }
 
 #n58-page-loader .bar-container {
-  width: 280px;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
-  overflow: hidden;
+  width: 320px;
+  height: 16px;
+  background: transparent;
+  border: 2px solid var(--te-quiero-verde);
   position: relative;
+  overflow: hidden;
 }
 
 #n58-page-loader .bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--te-quiero-verde), var(--not-barbie-light));
-  border-radius: 2px;
+  background: var(--te-quiero-verde);
   width: 0%;
   animation: barLoad 2.5s ease-out forwards;
-  position: relative;
-}
-
-#n58-page-loader .bar-fill::after {
-  content: '';
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  animation: shimmer 1.5s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#n58-page-loader .bar-text {
+  color: var(--oro-negro);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  opacity: 0;
+  animation: textFadeIn 0.3s ease forwards 0.5s;
 }
 
 @keyframes barLoad {
@@ -296,9 +303,9 @@
   100% { width: 100%; }
 }
 
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+@keyframes textFadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 /* Hide loader when page is loaded */
@@ -306,4 +313,44 @@ body.loaded #n58-page-loader {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* ✅ Spline Placeholder - Fast-loading fallback image */
+[data-spline] {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Placeholder image (set via inline style or data attribute) */
+[data-spline]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  opacity: 1;
+  transition: opacity 0.8s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Hide placeholder when Spline is loaded */
+[data-spline].spline-loaded::before {
+  opacity: 0;
+}
+
+/* Spline viewer starts transparent */
+[data-spline] > spline-viewer {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  z-index: 2;
+}
+
+/* Fade in Spline when ready */
+[data-spline].spline-loaded > spline-viewer {
+  opacity: 1;
 }
