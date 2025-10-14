@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  const url = 'https://bcv-api.vanalva.com/';
+  const url = 'https://n58.pages.dev/api/bcv';
 
   const displayError = (message) => {
     document.querySelectorAll('[data-bcv]').forEach(el => {
