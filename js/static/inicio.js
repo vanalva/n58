@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!fixedButtons) return;
 
   const isDesktop = () => window.innerWidth >= 992;
-  let wasDragged = false;
 
   function debounce(func, wait) {
     let timeout;
@@ -56,26 +55,62 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   if (isDesktop()) {
-    Draggable.create(fixedButtons, {
-      type: "x,y",
-      bounds: "body",
-      edgeResistance: 0.65,
-      onDragStart: function() {
-        wasDragged = true;
-      },
-      onDrag: function() {
-        const rect = this.target.getBoundingClientRect();
-        if (rect.right < 0 || rect.bottom < 0 || rect.left > window.innerWidth || rect.top > window.innerHeight) {
-          gsap.set(this.target, { x: 0, y: 0 });
-        }
+    let isDragging = false;
+    let currentX = 0, currentY = 0, initialX = 0, initialY = 0;
+    let xOffset = 0, yOffset = 0;
+
+    // Load saved position from localStorage
+    const saved = localStorage.getItem('fixedButtonsPosition');
+    if (saved) {
+      const pos = JSON.parse(saved);
+      fixedButtons.style.transform = `translate(${pos.x}px, ${pos.y}px)`;
+      xOffset = pos.x;
+      yOffset = pos.y;
+    }
+
+    fixedButtons.addEventListener('mousedown', (e) => {
+      initialX = e.clientX - xOffset;
+      initialY = e.clientY - yOffset;
+      isDragging = true;
+      fixedButtons.style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      
+      e.preventDefault();
+      currentX = e.clientX - initialX;
+      currentY = e.clientY - initialY;
+      xOffset = currentX;
+      yOffset = currentY;
+
+      // Boundary check
+      const rect = fixedButtons.getBoundingClientRect();
+      if (rect.right > 0 && rect.bottom > 0 && 
+          rect.left < window.innerWidth && rect.top < window.innerHeight) {
+        fixedButtons.style.transform = `translate(${currentX}px, ${currentY}px)`;
       }
     });
 
-    window.addEventListener("scroll", debounce(function() {
-      if (wasDragged) {
-        gsap.set(fixedButtons, { clearProps: "x,y" });
-        wasDragged = false;
+    document.addEventListener('mouseup', () => {
+      if (isDragging) {
+        isDragging = false;
+        fixedButtons.style.cursor = 'grab';
+        
+        // Save position to localStorage
+        localStorage.setItem('fixedButtonsPosition', JSON.stringify({
+          x: xOffset,
+          y: yOffset
+        }));
       }
+    });
+
+    // Reset position on scroll
+    window.addEventListener('scroll', debounce(() => {
+      fixedButtons.style.transform = '';
+      xOffset = 0;
+      yOffset = 0;
+      localStorage.removeItem('fixedButtonsPosition');
     }, 100));
   }
 });

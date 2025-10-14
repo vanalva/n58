@@ -26,13 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
       iframeLoaded = true;
     };
   
-    // 🖱️ Load immediately on user click (your original behavior)
+    // 🖱️ Load ONLY on user click (don't auto-load)
     trigger.addEventListener('click', loadIframe);
-  
-    // 🧠 Also load automatically after idle or timeout (non-blocking)
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(loadIframe, { timeout: 4000 });
-    } else {
-      setTimeout(loadIframe, 4000);
-    }
   });

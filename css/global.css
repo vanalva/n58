@@ -176,28 +176,28 @@
   background: none !important;
 }
 
-/* ✅ Spline fade-in from bottom */
+/* ✅ Spline fade-in from bottom - Smoother, slower fade */
 [data-spline] > spline-viewer.spline-enter {
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(20px);
 }
 
 [data-spline] > spline-viewer.spline-enter-active {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.36s ease, transform 0.36s ease;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ✅ Lottie fade-in from bottom */
+/* ✅ Lottie fade-in from bottom - Smooth, elegant fade for logo */
 [data-lottie].lottie-enter {
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(12px);
 }
 
 [data-lottie].lottie-enter-active {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.28s ease, transform 0.28s ease;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ✅ Nugros Custom Fonts (loaded at end to prevent render blocking) */

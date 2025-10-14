@@ -2,12 +2,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const splineContainers = document.querySelectorAll('[data-spline]');
   if (!splineContainers.length) return;
 
-  // Tuning knobs
-  const MIN_DELAY_AFTER_LCP_MS = 400;   // shorter buffer after LCP
-  const QUIET_WINDOW_MS = 600;          // slightly shorter quiet window
-  const QUIET_TIMEOUT_MS = 5000;        // earlier give-up
-  const STAGGER_MS = 150;               // lighter stagger
-  const IO_ROOT_MARGIN = '300px 0px';   // start earlier before viewport
+  // Tuning knobs - Balanced for smooth loading without harsh black
+  const MIN_DELAY_AFTER_LCP_MS = 600;   // Slight delay to prioritize content
+  const QUIET_WINDOW_MS = 400;          // Shorter quiet window
+  const QUIET_TIMEOUT_MS = 3500;        // Faster timeout
+  const STAGGER_MS = 100;               // Faster stagger
+  const IO_ROOT_MARGIN = '400px 0px';   // Start loading earlier to avoid black space
 
   let splineScriptLoaded = false;
   let scriptLoading = null;
