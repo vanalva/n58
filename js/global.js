@@ -27,8 +27,8 @@ function initPageLoader() {
     // Inject loader immediately
     document.body.insertAdjacentHTML('afterbegin', loaderHTML);
     
-    // Hide loader when page is fully loaded
-    window.addEventListener('load', () => {
+    // Hide loader function
+    const hideLoader = () => {
         document.body.classList.add('loaded');
         
         // Remove loader from DOM after fade out
@@ -36,7 +36,19 @@ function initPageLoader() {
             const loader = document.getElementById('n58-page-loader');
             if (loader) loader.remove();
         }, 300);
+    };
+    
+    // Hide loader when page is fully loaded
+    window.addEventListener('load', hideLoader);
+    
+    // Fallback: Hide after DOM is ready (faster)
+    document.addEventListener('DOMContentLoaded', () => {
+        // Wait a bit for critical resources to load
+        setTimeout(hideLoader, 1000);
     });
+    
+    // Emergency fallback: Hide after 3 seconds max
+    setTimeout(hideLoader, 3000);
 }
 
 function initCustomCursor() {
