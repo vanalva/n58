@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     scriptLoading = new Promise((resolve) => {
       const script = document.createElement('script');
-      script.src = 'https://n58.pages.dev/js/lottie.min.js';
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.2/lottie.min.js';
       script.async = true;
       script.onload = resolve;
       document.body.appendChild(script);
