@@ -1,6 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   const splineContainers = document.querySelectorAll('[data-spline]');
-  if (!splineContainers.length) return;
+  if (!splineContainers.length) {
+    console.log('No Spline containers found');
+    return;
+  }
+  
+  console.log(`Found ${splineContainers.length} Spline containers`);
 
   // Tuning knobs - Balanced for smooth loading without harsh black
   const MIN_DELAY_AFTER_LCP_MS = 600;   // Slight delay to prioritize content
@@ -15,16 +20,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const shouldLoadSpline = () => window.innerWidth > 1024;
 
   const loadSplineViewerScript = () => {
-    if (splineScriptLoaded) return Promise.resolve();
-    if (scriptLoading) return scriptLoading;
+    if (splineScriptLoaded) {
+      console.log('Spline script already loaded');
+      return Promise.resolve();
+    }
+    if (scriptLoading) {
+      console.log('Spline script already loading');
+      return scriptLoading;
+    }
 
-    scriptLoading = new Promise((resolve) => {
+    console.log('Loading Spline script...');
+    scriptLoading = new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.type = 'module';
       script.src = 'https://unpkg.com/@splinetool/viewer@1.10.14/build/spline-viewer.js';
       script.onload = () => {
+        console.log('Spline script loaded successfully');
         splineScriptLoaded = true;
         resolve();
+      };
+      script.onerror = (error) => {
+        console.error('Failed to load Spline script:', error);
+        reject(error);
       };
       document.body.appendChild(script);
     });
@@ -33,16 +50,24 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const injectOneSpline = (container) => {
-    if (container.__splineInitialized) return;
+    if (container.__splineInitialized) {
+      console.log('Spline already initialized for container');
+      return;
+    }
 
     const sceneURL = container.getAttribute('data-spline');
-    if (!sceneURL) return;
+    if (!sceneURL) {
+      console.error('No data-spline URL found on container');
+      return;
+    }
 
     if (container.querySelector('spline-viewer')) {
+      console.log('Spline viewer already exists in container');
       container.__splineInitialized = true;
       return;
     }
 
+    console.log(`Injecting Spline viewer with URL: ${sceneURL}`);
     const viewer = document.createElement('spline-viewer');
     viewer.setAttribute('url', sceneURL);
     viewer.style.width = '100%';
@@ -53,8 +78,10 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Wait for Spline to actually load before fading in
     viewer.addEventListener('load', () => {
+      console.log('Spline viewer loaded successfully');
       setTimeout(() => {
         container.classList.add('spline-loaded');
+        console.log('Added spline-loaded class');
       }, 100);
     });
 
