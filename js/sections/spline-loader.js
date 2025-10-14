@@ -91,6 +91,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 100);
     });
 
+    // Fallback: Apply class after 3 seconds regardless
+    setTimeout(() => {
+      if (!container.classList.contains('spline-loaded')) {
+        console.log('Fallback: Adding spline-loaded class after 3s timeout');
+        container.classList.add('spline-loaded');
+      }
+    }, 3000);
+
     // Add error handling
     viewer.addEventListener('error', (error) => {
       console.error('Spline viewer error:', error);
