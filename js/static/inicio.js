@@ -1,7 +1,4 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  // BCV data is now managed by N8N workflow -> Webflow CMS
-  // No custom JavaScript needed for display
-
   let isScrollBlocked = false;
 
   const isMobile = () => window.innerWidth <= 767;

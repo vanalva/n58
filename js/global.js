@@ -1,9 +1,42 @@
 /* global.js — loaded on all pages */
+
+// ✅ Initialize page loader immediately (before DOM ready)
+initPageLoader();
+
 document.addEventListener('DOMContentLoaded', function () {
     initCustomCursor();
     initNotchButtons();
     initNavbarScrollBlock();
 });
+
+function initPageLoader() {
+    // Create loader HTML
+    const loaderHTML = `
+        <div id="n58-page-loader">
+            <div class="loader-content">
+                <div class="loader-logo">N58</div>
+                <div class="loader-text">Cargando experiencia digital</div>
+                <div class="bar-container">
+                    <div class="bar-fill"></div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Inject loader immediately
+    document.body.insertAdjacentHTML('afterbegin', loaderHTML);
+    
+    // Hide loader when page is fully loaded
+    window.addEventListener('load', () => {
+        document.body.classList.add('loaded');
+        
+        // Remove loader from DOM after fade out
+        setTimeout(() => {
+            const loader = document.getElementById('n58-page-loader');
+            if (loader) loader.remove();
+        }, 300);
+    });
+}
 
 function initCustomCursor() {
     // Skip on touch devices (mobile/tablets)

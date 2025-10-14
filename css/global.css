@@ -221,3 +221,89 @@
   font-display: optional;
   src: url('https://n58.pages.dev/fonts/Nugros-ExtraBold.woff2') format('woff2'), local('Arial');
 }
+
+/* ✅ Page Loader - Sleek Bar Style */
+#n58-page-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--oro-negro);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  font-family: 'Nugros', sans-serif;
+}
+
+#n58-page-loader .loader-content {
+  text-align: center;
+  color: white;
+}
+
+#n58-page-loader .loader-logo {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+  letter-spacing: 0.1em;
+}
+
+#n58-page-loader .loader-text {
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 3rem;
+  opacity: 0.8;
+  letter-spacing: 0.05em;
+}
+
+#n58-page-loader .bar-container {
+  width: 280px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+#n58-page-loader .bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--te-quiero-verde), var(--not-barbie-light));
+  border-radius: 2px;
+  width: 0%;
+  animation: barLoad 2.5s ease-out forwards;
+  position: relative;
+}
+
+#n58-page-loader .bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes barLoad {
+  0% { width: 0%; }
+  20% { width: 25%; }
+  40% { width: 50%; }
+  60% { width: 75%; }
+  80% { width: 90%; }
+  100% { width: 100%; }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Hide loader when page is loaded */
+body.loaded #n58-page-loader {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
