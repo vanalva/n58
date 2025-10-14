@@ -14,7 +14,7 @@ function initPageLoader() {
     const loaderHTML = `
         <div id="n58-page-loader">
             <div class="loader-content">
-                <div class="loader-logo"></div>
+                <div class="loader-logo">N58</div>
                 <div class="bar-container">
                     <div class="bar-fill">
                         <span class="bar-text">Cargando experiencia digital</span>
