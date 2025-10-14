@@ -347,13 +347,13 @@ body.loaded #n58-page-loader {
 
 /* Crossfade: image fades out, spline fades in simultaneously */
 [data-spline].spline-loaded::before {
-  opacity: 0;
-  transform: translateY(-10px);
+  opacity: 0 !important;
+  transform: translateY(-10px) !important;
 }
 
 [data-spline].spline-loaded > spline-viewer {
-  opacity: 1;
-  transform: translateY(0);
+  opacity: 1 !important;
+  transform: translateY(0) !important;
 }
 
 /* Simple fade-in animation */

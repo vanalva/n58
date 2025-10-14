@@ -86,6 +86,8 @@ document.addEventListener("DOMContentLoaded", () => {
       // Immediate crossfade - no delay for perfect sync
       container.classList.add('spline-loaded');
       console.log('Added spline-loaded class');
+      console.log('Container classes:', container.className);
+      console.log('Container has spline-loaded:', container.classList.contains('spline-loaded'));
     });
 
     // Fallback: Apply class after 2.5 seconds (shorter timeout)
@@ -95,6 +97,12 @@ document.addEventListener("DOMContentLoaded", () => {
         container.classList.add('spline-loaded');
       }
     }, 2500);
+
+    // Manual test: force crossfade after 3 seconds for debugging
+    setTimeout(() => {
+      console.log('Manual test: Forcing crossfade after 3s');
+      container.classList.add('spline-loaded');
+    }, 3000);
 
     // Add error handling
     viewer.addEventListener('error', (error) => {
