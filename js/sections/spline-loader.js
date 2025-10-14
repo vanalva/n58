@@ -48,16 +48,14 @@ document.addEventListener("DOMContentLoaded", () => {
     viewer.style.width = '100%';
     viewer.style.height = '100%';
     viewer.style.display = 'block';
-    viewer.classList.add('spline-enter');
 
     container.appendChild(viewer);
-    container.classList.add('spline-loaded');
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        viewer.classList.add('spline-enter-active');
-        viewer.classList.remove('spline-enter');
-      });
+    
+    // Wait for Spline to actually load before fading in
+    viewer.addEventListener('load', () => {
+      setTimeout(() => {
+        container.classList.add('spline-loaded');
+      }, 100);
     });
 
     container.__splineInitialized = true;

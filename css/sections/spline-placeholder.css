@@ -1,0 +1,40 @@
+/* Spline Placeholder - Fast-loading fallback image */
+[data-spline] {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Placeholder image (set via inline style or data attribute) */
+[data-spline]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  opacity: 1;
+  transition: opacity 0.8s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Hide placeholder when Spline is loaded */
+[data-spline].spline-loaded::before {
+  opacity: 0;
+}
+
+/* Spline viewer starts transparent */
+[data-spline] > spline-viewer {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  z-index: 2;
+}
+
+/* Fade in Spline when ready */
+[data-spline].spline-loaded > spline-viewer {
+  opacity: 1;
+}
+
