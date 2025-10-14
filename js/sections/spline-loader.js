@@ -80,24 +80,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     container.appendChild(viewer);
     
-    // Wait for Spline to actually load before fading in
+    // Wait for Spline to actually load before crossfade
     viewer.addEventListener('load', () => {
       console.log('Spline viewer loaded successfully');
-      console.log('Container dimensions:', container.offsetWidth, 'x', container.offsetHeight);
-      console.log('Viewer dimensions:', viewer.offsetWidth, 'x', viewer.offsetHeight);
-      setTimeout(() => {
-        container.classList.add('spline-loaded');
-        console.log('Added spline-loaded class');
-      }, 100);
+      // Immediate crossfade - no delay for perfect sync
+      container.classList.add('spline-loaded');
+      console.log('Added spline-loaded class');
     });
 
-    // Fallback: Apply class after 3 seconds regardless
+    // Fallback: Apply class after 2.5 seconds (shorter timeout)
     setTimeout(() => {
       if (!container.classList.contains('spline-loaded')) {
-        console.log('Fallback: Adding spline-loaded class after 3s timeout');
+        console.log('Fallback: Adding spline-loaded class after 2.5s timeout');
         container.classList.add('spline-loaded');
       }
-    }, 3000);
+    }, 2500);
 
     // Add error handling
     viewer.addEventListener('error', (error) => {

@@ -306,7 +306,7 @@ body.loaded #n58-page-loader {
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-/* ✅ Spline Placeholder - Fast-loading fallback image */
+/* ✅ Spline Placeholder - Performance-optimized crossfade */
 [data-spline] {
   position: relative;
   background-size: cover;
@@ -314,7 +314,7 @@ body.loaded #n58-page-loader {
   background-repeat: no-repeat;
 }
 
-/* Placeholder image (set via inline style or data attribute) */
+/* Background image with fade-in from bottom */
 [data-spline]::before {
   content: '';
   position: absolute;
@@ -324,25 +324,46 @@ body.loaded #n58-page-loader {
   height: 100%;
   background: inherit;
   opacity: 1;
-  transition: opacity 0.8s ease;
+  transform: translateY(0);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
   pointer-events: none;
   z-index: 1;
+  will-change: opacity, transform;
 }
 
-/* Hide placeholder when Spline is loaded */
-[data-spline].spline-loaded::before {
-  opacity: 0 !important;
-  pointer-events: none !important;
+/* Initial state: image slides up from bottom */
+[data-spline]:not(.spline-loaded)::before {
+  animation: fadeInFromBottom 0.4s ease-out forwards;
 }
 
-/* Spline viewer starts transparent */
+/* Spline viewer - starts hidden */
 [data-spline] > spline-viewer {
   opacity: 0;
-  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
   z-index: 2;
+  will-change: opacity, transform;
 }
 
-/* Fade in Spline when ready */
+/* Crossfade: image fades out, spline fades in simultaneously */
+[data-spline].spline-loaded::before {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
 [data-spline].spline-loaded > spline-viewer {
-  opacity: 1 !important;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Simple fade-in animation */
+@keyframes fadeInFromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
