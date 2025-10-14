@@ -68,22 +68,41 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     console.log(`Injecting Spline viewer with URL: ${sceneURL}`);
+    console.log('Container computed styles:', window.getComputedStyle(container));
+    
     const viewer = document.createElement('spline-viewer');
     viewer.setAttribute('url', sceneURL);
     viewer.style.width = '100%';
     viewer.style.height = '100%';
     viewer.style.display = 'block';
+    viewer.style.visibility = 'visible';
+    viewer.style.opacity = '1';
 
     container.appendChild(viewer);
     
     // Wait for Spline to actually load before fading in
     viewer.addEventListener('load', () => {
       console.log('Spline viewer loaded successfully');
+      console.log('Container dimensions:', container.offsetWidth, 'x', container.offsetHeight);
+      console.log('Viewer dimensions:', viewer.offsetWidth, 'x', viewer.offsetHeight);
       setTimeout(() => {
         container.classList.add('spline-loaded');
         console.log('Added spline-loaded class');
       }, 100);
     });
+
+    // Add error handling
+    viewer.addEventListener('error', (error) => {
+      console.error('Spline viewer error:', error);
+    });
+
+    // Debug after a delay to see if anything renders
+    setTimeout(() => {
+      console.log('Spline debug after 2s:');
+      console.log('- Container visible:', container.offsetWidth > 0 && container.offsetHeight > 0);
+      console.log('- Viewer visible:', viewer.offsetWidth > 0 && viewer.offsetHeight > 0);
+      console.log('- Viewer in DOM:', document.contains(viewer));
+    }, 2000);
 
     container.__splineInitialized = true;
   };
