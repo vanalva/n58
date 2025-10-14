@@ -19,18 +19,11 @@
   }
   
   .marquee_container {
-    --marquee-play-state: running;
     overflow: hidden;
   }
   
   .marquee_container .marquee_elements-container {
     animation: marqueeScroll 15s linear infinite;
     will-change: transform;
-    animation-play-state: var(--marquee-play-state, running);
-    transition: animation-play-state 1s ease;
-  }
-  
-  .marquee_container:hover {
-    --marquee-play-state: paused;
   }
   
