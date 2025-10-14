@@ -15,9 +15,6 @@ document.addEventListener("DOMContentLoaded", function () {
   if (campoCodigo) {
     const codigoGenerado = generarCodigoUnico();
     campoCodigo.value = codigoGenerado;
-    console.log("Código generado:", codigoGenerado);
-  } else {
-    console.warn('No se encontró el campo con data-reclamo="codigo"');
   }
 
   const selector = document.querySelector('[data-reclamo-selector]');

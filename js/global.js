@@ -6,14 +6,11 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function initCustomCursor() {
+    // Skip on touch devices (mobile/tablets)
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
+    
     const tricksCursor = document.querySelector('.cursor');
     if (!tricksCursor) return;
-    
-    // Cache selectors
-    const stickElements = document.querySelectorAll(".to-the-bottom, .nav-link, .servicios-item-icon, .button, .cursor-stick, .link");
-    const cursorStickElements = document.querySelectorAll(".cursor-stick");
-    const cursorAdaptElements = document.querySelectorAll('.cursor-adapt');
-    const cursorCodeElement = document.querySelector('.cursor-code');
   
     const cursorMove = (e) => {
       tricksCursor.style.top = `${e.clientY}px`;
@@ -22,7 +19,7 @@ function initCustomCursor() {
 
     // Throttle mousemove events
     const throttledMouseMove = throttle(cursorMove);
-    window.addEventListener('mousemove', throttledMouseMove);
+    window.addEventListener('mousemove', throttledMouseMove, { passive: true });
 }
 
 function throttle(func) {
@@ -90,11 +87,6 @@ function initNavbarScrollBlock() {
             event.preventDefault();
         }
     };
-  
-    // Cache options objects
-    const wheelOptions = { passive: false };
-    const touchOptions = { passive: false };
-    const keyOptions = { passive: false };
   
     // Desktop hover scroll-lock
     if (window.innerWidth > 1024) {

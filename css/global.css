@@ -27,7 +27,6 @@
     pointer-events: none;
     position: fixed;
     opacity: 0%;
-    will-change: transform;
   }
   
   body:hover .cursor {
@@ -37,7 +36,6 @@
   /* ✅ Fade-Out Animation */
   .fade-out {
     animation: fadeOut 1s ease forwards;
-    will-change: opacity;
   }
   
   @keyframes fadeOut {
@@ -123,7 +121,6 @@
     clip-path: polygon(0 0, calc(100% - var(--slant-size)) 0, 100% var(--slant-size), 100% 100%, 0% 100%, 0% 0%);
     box-shadow: 0 0 0 var(--border-width) currentColor inset;
     transition: transform 0.3s ease, background-color 0.2s ease, color 0.2s ease;
-    will-change: transform;
   }
   
   [class*="notch-button-duplicate"] {
@@ -137,7 +134,6 @@
     transform: translate(0, 0);
     opacity: 1;
     transition: transform 0.3s ease, opacity 0.3s ease;
-    will-change: transform;
   }
   
   [class*="notch-button"]:hover {
@@ -181,10 +177,6 @@
 }
 
 /* ✅ Spline fade-in from bottom */
-[data-spline] > spline-viewer {
-  will-change: transform, opacity;
-}
-
 [data-spline] > spline-viewer.spline-enter {
   opacity: 0;
   transform: translateY(12px);
@@ -197,10 +189,6 @@
 }
 
 /* ✅ Lottie fade-in from bottom */
-[data-lottie] {
-  will-change: transform, opacity;
-}
-
 [data-lottie].lottie-enter {
   opacity: 0;
   transform: translateY(8px);
