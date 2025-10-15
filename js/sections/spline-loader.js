@@ -106,21 +106,25 @@ document.addEventListener("DOMContentLoaded", () => {
       position: relative;
     `;
     
-    // Animate the progress bar and percentage
-    let progress = 0;
-    const animateProgress = () => {
-      progress += Math.random() * 15;
-      if (progress > 90) progress = 90;
-      fill.style.width = progress + '%';
-      percentage.textContent = Math.round(progress) + '%';
-      
-      if (progress < 90) {
-        setTimeout(animateProgress, 200 + Math.random() * 300);
-      }
-    };
-    animateProgress();
+    // Store references for real Spline progress tracking
+    container.__splinePreloaderFill = fill;
+    container.__splinePreloaderPercentage = percentage;
+    
+    // Initial progress
+    fill.style.width = '0%';
+    percentage.textContent = '0%';
     
     return preloader;
+  };
+
+  const updateSplineProgress = (container, progress) => {
+    const fill = container.__splinePreloaderFill;
+    const percentage = container.__splinePreloaderPercentage;
+    
+    if (fill && percentage) {
+      fill.style.width = progress + '%';
+      percentage.textContent = Math.round(progress) + '%';
+    }
   };
 
   const hideSplinePreloader = (container) => {
@@ -170,9 +174,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     container.appendChild(viewer);
     
+    // Track real Spline loading progress
+    viewer.addEventListener('progress', (event) => {
+      const progress = event.detail.progress * 100; // Convert to percentage
+      console.log(`Spline loading progress: ${progress}%`);
+      updateSplineProgress(container, progress);
+    });
+    
     // Wait for Spline to actually load before crossfade
     viewer.addEventListener('load', () => {
       console.log('Spline viewer loaded successfully');
+      
+      // Update to 100% before hiding
+      updateSplineProgress(container, 100);
       
       // Perfect synchronization: Hide preloader first, then show Spline
       hideSplinePreloader(container);
@@ -190,10 +204,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 100); // Small delay for perfect sync
     });
 
-    // Fallback: Apply class after 2.5 seconds (shorter timeout)
+    // Fallback: Apply class after 5 seconds (longer timeout for real loading)
     setTimeout(() => {
       if (!container.classList.contains('spline-loaded')) {
-        console.log('Fallback: Adding spline-loaded class after 2.5s timeout');
+        console.log('Fallback: Adding spline-loaded class after 5s timeout');
+        // Update to 100% on fallback
+        updateSplineProgress(container, 100);
         // Hide the preloader on fallback too
         hideSplinePreloader(container);
         
@@ -205,7 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
           container.classList.add('spline-loaded');
         }, 100);
       }
-    }, 2500);
+    }, 5000);
 
 
     // Add error handling
