@@ -1,0 +1,537 @@
+/* === N58 UNIFIED CSS === */
+/* All styles in one file to eliminate render-blocking requests */
+
+/* ✅ Intellimize Anti-Flicker Fix */
+html.anti-flicker,
+html.anti-flicker *,
+html.async-hide,
+html.async-hide * {
+  visibility: visible !important;
+  opacity: 1 !important;
+  transition: none !important;
+}
+
+/* ✅ Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 7px;
+    background: var(--oro-negro);
+  }
+  
+  ::-webkit-scrollbar-track {
+    border-radius: 50px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    border-radius: 50px;
+    background: var(--te-quiero-verde);
+    height: 30% !important;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover,
+  ::-webkit-scrollbar-thumb:active {
+    background: var(--not-barbie-light);
+  }
+  
+  /* ✅ Cursor Fade */
+  .cursor {
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    position: fixed;
+    opacity: 0%;
+  }
+  
+  body:hover .cursor {
+    opacity: 100%;
+  }
+  
+  /* ✅ Fade-Out Animation */
+  .fade-out {
+    animation: fadeOut 1s ease forwards;
+  }
+  
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  
+  /* ✅ Notched DIV Element */
+  .notch-div {
+    --slant-size: 45px;
+    --border-width: 2px;
+    border: none;
+    background:
+      linear-gradient(to bottom left, currentColor 50%, transparent 50.1%) top right;
+    background-size: calc(var(--slant-size) + 1.3 * var(--border-width))
+                     calc(var(--slant-size) + 1.3 * var(--border-width));
+    background-repeat: no-repeat;
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--slant-size)) 0,
+      100% var(--slant-size),
+      100% 100%,
+      0% 100%,
+      0% 0%
+    );
+    box-shadow: 0 0 0 var(--border-width) currentColor inset;
+    position: relative;
+  }
+  
+  /* ✅ Notched Image Container */
+  .notch-image {
+    --slant-size: 45px;
+    position: relative;
+    overflow: hidden;
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--slant-size)) 0,
+      100% var(--slant-size),
+      100% 100%,
+      0 100%,
+      0 0
+    );
+  }
+  
+  .notch-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* ✅ Selection Styles */
+  html {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+  
+  ::selection {
+    background-color: rgba(160, 221, 82, 0.6); /* light green */
+    color: var(--oro-negro) !important;
+    mix-blend-mode: multiply;
+  }
+  
+  .button-wrapper {
+    position: relative !important;
+    display: inline-block !important;
+  }
+  
+  [class*="notch-button"] {
+    --slant-size: 15px;
+    --border-width: 2px;
+    --shadow-offset: 5px;
+    border: none;
+    position: relative;
+    padding: 12px 24px;
+    font-size: 16px;
+    background: linear-gradient(to bottom left, currentColor 50%, transparent 50.1%) top right;
+    background-size: calc(var(--slant-size) + 1.3 * var(--border-width)) calc(var(--slant-size) + 1.3 * var(--border-width));
+    background-repeat: no-repeat;
+    clip-path: polygon(0 0, calc(100% - var(--slant-size)) 0, 100% var(--slant-size), 100% 100%, 0% 100%, 0% 0%);
+    box-shadow: 0 0 0 var(--border-width) currentColor inset;
+    transition: transform 0.3s ease, background-color 0.2s ease, color 0.2s ease;
+  }
+  
+  [class*="notch-button-duplicate"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: currentColor !important;
+    transform: translate(0, 0);
+    opacity: 1;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
+  [class*="notch-button"]:hover {
+    transform: translate(-5px, -5px);
+  }
+  
+  [class*="notch-button"]:hover ~ [class*="notch-button-duplicate"] {
+    transform: translate(5px, 5px);
+  }
+  
+  [class*="notch-button"]:active {
+    transform: translate(0, 0);
+    transition: transform 0.1s ease;
+  }
+  
+  [class*="notch-button"]:active ~ [class*="notch-button-duplicate"] {
+    transform: translate(0, 0);
+    transition: transform 0.1s ease;
+  }
+  
+  .button-wrapper [class*="notch-button"] {
+    color: inherit;
+  }
+
+/* Parent doesn't receive clicks */
+.notch-outline {
+  pointer-events: none  !important;
+}
+
+  .fixed_buttons {
+    pointer-events: none;
+  }
+  .fixed_buttons > * {
+    pointer-events: auto;
+  }
+
+  /* ✅ Spline Container Background Control */
+[data-spline].spline-loaded,
+[data-spline].spline-loaded * {
+  background: none !important;
+}
+
+
+/* ✅ Lottie fade-in from bottom - Smooth, elegant fade for logo */
+[data-lottie].lottie-enter {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+[data-lottie].lottie-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ✅ Lottie Container Sizing - Prevent clipping */
+[data-lottie] {
+  overflow: visible !important;
+  position: relative;
+}
+
+[data-lottie] svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ✅ Nugros Custom Fonts (loaded at end to prevent render blocking) */
+@font-face {
+  font-family: 'Nugros';
+  font-weight: 400;
+  font-style: normal;
+  font-display: optional;
+  src: url('https://n58.pages.dev/fonts/Nugros-Regular.woff2') format('woff2'), local('Arial');
+}
+
+@font-face {
+  font-family: 'Nugros';
+  font-weight: 600;
+  font-style: normal;
+  font-display: optional;
+  src: url('https://n58.pages.dev/fonts/Nugros-SemiBold.woff2') format('woff2'), local('Arial');
+}
+
+@font-face {
+  font-family: 'Nugros';
+  font-weight: 700;
+  font-style: normal;
+  font-display: optional;
+  src: url('https://n58.pages.dev/fonts/Nugros-Bold.woff2') format('woff2'), local('Arial');
+}
+
+@font-face {
+  font-family: 'Nugros';
+  font-weight: 800;
+  font-style: normal;
+  font-display: optional;
+  src: url('https://n58.pages.dev/fonts/Nugros-ExtraBold.woff2') format('woff2'), local('Arial');
+}
+
+/* ✅ Page Loader - Sleek Bar Style */
+#n58-page-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--oro-negro);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  font-family: 'Nugros', sans-serif;
+}
+
+#n58-page-loader .loader-content {
+  text-align: center;
+  color: white;
+}
+
+
+#n58-page-loader .loader-text {
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 2rem;
+  opacity: 0.8;
+  letter-spacing: 0.05em;
+}
+
+#n58-page-loader .bar-container {
+  width: 320px;
+  height: 16px;
+  background: transparent;
+  border: 2px solid var(--te-quiero-verde);
+  position: relative;
+  overflow: hidden;
+}
+
+#n58-page-loader .bar-fill {
+  height: 100%;
+  background: var(--te-quiero-verde);
+  width: 0%;
+  animation: barLoad 2.5s ease-out forwards;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#n58-page-loader .bar-text {
+  color: var(--oro-negro);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  opacity: 0;
+  animation: textFadeIn 0.3s ease forwards 0.5s;
+}
+
+@keyframes barLoad {
+  0% { width: 0%; }
+  20% { width: 25%; }
+  40% { width: 50%; }
+  60% { width: 75%; }
+  80% { width: 90%; }
+  100% { width: 100%; }
+}
+
+@keyframes textFadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Hide loader when page is loaded */
+body.loaded #n58-page-loader {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* ✅ Spline Placeholder - Performance-optimized crossfade */
+[data-spline] {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Background image with fade-in from bottom */
+[data-spline]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  pointer-events: none;
+  z-index: 1;
+  will-change: opacity, transform;
+}
+
+/* Initial state: image slides up from bottom */
+[data-spline]:not(.spline-loaded)::before {
+  animation: fadeInFromBottom 0.4s ease-out forwards;
+}
+
+/* Spline viewer - starts hidden */
+[data-spline] > spline-viewer {
+  opacity: 0;
+  transform: translateY(0);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  z-index: 2;
+  will-change: opacity, transform;
+}
+
+/* Crossfade: image fades out, spline fades in simultaneously */
+[data-spline].spline-loaded::before {
+  opacity: 0 !important;
+  transform: translateY(-10px) !important;
+}
+
+[data-spline].spline-loaded > spline-viewer {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Simple fade-in animation */
+@keyframes fadeInFromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === MARQUEE STYLES (from cambio-marquee.css) === */
+.marquee_dynamic-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  
+  .marquee_dynamic-text {
+    white-space: nowrap;
+    font-weight: 100;
+    line-height: 1;
+  }
+  
+  @keyframes marqueeScroll {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  
+  .marquee_container {
+    overflow: hidden;
+  }
+  
+  .marquee_container .marquee_elements-container {
+    animation: marqueeScroll 15s linear infinite;
+    will-change: transform;
+  }
+
+/* === DOCUMENTOS STYLES (from documentos.css) === */
+.tabla-tarifario-rtf-embed {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: var(--oro-negro);
+}
+
+.tabla-tarifario-rtf-embed th,
+.tabla-tarifario-rtf-embed td {
+    padding: 16px 12px;
+    border: 2px solid var(--oro-negro);
+    vertical-align: middle;
+}
+
+.tabla-tarifario-rtf-embed th {
+    background-color: var(--oro-negro);
+    color: var(--caldito-de-pollo);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    border-bottom: 3px solid var(--caldito-de-pollo);
+    line-height: 1rem;
+}
+
+.tabla-tarifario-rtf-embed td {
+    background-color: var(--caldito-de-pollo);
+    font-weight: 400;
+}
+
+.tabla-tarifario-rtf-embed tbody tr:nth-child(even):not(.subtitulo-tabla-rtf) td {
+    background-color: var(--caldito-de-pollo-dark);
+}
+
+.tabla-tarifario-rtf-embed td:last-child {
+    text-align: right;
+}
+
+.tabla-tarifario-rtf-embed tr.subtitulo-tabla-rtf td {
+    font-weight: 700;
+    font-size: 0.95rem;
+    background-color: var(--oro-negro);
+    color: var(--caldito-de-pollo);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    text-align: left;
+}
+
+/* 🔁 Responsive tweaks */
+@media screen and (max-width: 768px) {
+    .tabla-tarifario-rtf-embed {
+        font-size: 0.85rem;
+    }
+
+    .tabla-tarifario-rtf-embed th,
+    .tabla-tarifario-rtf-embed td {
+        padding: 12px 8px;
+    }
+
+    .tabla-tarifario-rtf-embed th {
+        font-size: 1rem;
+    }
+
+    .tabla-tarifario-rtf-embed td:last-child {
+        text-align: left;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .tabla-tarifario-rtf-embed {
+        font-size: 0.78rem;
+    }
+
+    .tabla-tarifario-rtf-embed th,
+    .tabla-tarifario-rtf-embed td {
+        padding: 10px 6px;
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .tabla-tarifario-rtf-embed tr {
+        display: block;
+        margin-bottom: 1rem;
+    }
+
+    .tabla-tarifario-rtf-embed thead {
+        display: none;
+    }
+
+    .tabla-tarifario-rtf-embed td::before {
+        content: attr(data-label);
+        display: block;
+        font-weight: 700;
+        margin-bottom: 0.2rem;
+        color: var(--oro-negro);
+    }
+
+    .tabla-tarifario-rtf-embed td:last-child {
+        text-align: left;
+    }
+}
+
+/* Prevent justify inside Rich Text list items */
+.tc-terms_rich-text li {
+    text-align: left !important;
+}
+
+/* === INICIO STYLES (placeholder) === */
+.inicio-specific {
+  /* Placeholder for inicio-specific styles */
+}
