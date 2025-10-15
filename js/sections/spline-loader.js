@@ -43,9 +43,9 @@ document.addEventListener("DOMContentLoaded", () => {
     preloader.className = 'spline-preloader';
     preloader.innerHTML = `
       <div class="spline-preloader-content">
-        <div class="spline-preloader-text">Cargando experiencia 3D...</div>
         <div class="spline-preloader-bar">
           <div class="spline-preloader-fill"></div>
+          <div class="spline-preloader-percentage">0%</div>
         </div>
       </div>
     `;
@@ -71,13 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
       font-family: 'Nugros', sans-serif;
     `;
     
-    const text = preloader.querySelector('.spline-preloader-text');
-    text.style.cssText = `
-      font-size: 14px;
-      margin-bottom: 15px;
-      color: var(--te-quiero-verde);
-    `;
-    
     const bar = preloader.querySelector('.spline-preloader-bar');
     bar.style.cssText = `
       width: 200px;
@@ -87,6 +80,9 @@ document.addEventListener("DOMContentLoaded", () => {
       border-radius: 0;
       overflow: hidden;
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     `;
     
     const fill = preloader.querySelector('.spline-preloader-fill');
@@ -101,12 +97,22 @@ document.addEventListener("DOMContentLoaded", () => {
       left: 0;
     `;
     
-    // Animate the progress bar
+    const percentage = preloader.querySelector('.spline-preloader-percentage');
+    percentage.style.cssText = `
+      font-size: 12px;
+      color: var(--te-quiero-verde);
+      font-weight: 600;
+      z-index: 1;
+      position: relative;
+    `;
+    
+    // Animate the progress bar and percentage
     let progress = 0;
     const animateProgress = () => {
       progress += Math.random() * 15;
       if (progress > 90) progress = 90;
       fill.style.width = progress + '%';
+      percentage.textContent = Math.round(progress) + '%';
       
       if (progress < 90) {
         setTimeout(animateProgress, 200 + Math.random() * 300);
