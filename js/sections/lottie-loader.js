@@ -3,8 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!lottieContainers.length) return;
 
   // Defer Lottie loading - load after critical content
-  const LOTTIE_DELAY_MS = 6000;  // Wait 6 seconds after page load
-  const IO_ROOT_MARGIN = '100px 0px';  // Only load when very close
+  const LOTTIE_DELAY_MS = 2000;  // Wait only 2 seconds after page load
+  const IO_ROOT_MARGIN = '200px 0px';  // Load when reasonably close
 
   let scriptLoading = null;
   let lottieReady = false;
@@ -109,13 +109,13 @@ document.addEventListener('DOMContentLoaded', () => {
           loadLottieScript().then(() => {
             setupIntersectionObserver();
           });
-        }, { timeout: 8000 });
+        }, { timeout: 3000 }); // Shorter timeout for Lottie
       } else {
         setTimeout(() => {
           loadLottieScript().then(() => {
             setupIntersectionObserver();
           });
-        }, 2000);
+        }, 500); // Much shorter fallback for Lottie
       }
     });
   };
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
           io.unobserve(entry.target);
         }
       });
-    }, { rootMargin: IO_ROOT_MARGIN, threshold: 0.5 }); // Higher threshold
+    }, { rootMargin: IO_ROOT_MARGIN, threshold: 0.3 }); // Lower threshold for Lottie
 
     // Observe all containers
     lottieContainers.forEach((container) => {
