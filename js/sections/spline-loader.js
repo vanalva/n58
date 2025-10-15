@@ -2,8 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const splineContainers = document.querySelectorAll('[data-spline]');
   if (!splineContainers.length) return;
 
-  // Load Spline MUCH later - after critical content is rendered
-  const LOAD_DELAY_MS = 8000;           // Wait 8 seconds after page load
+  // Load Spline after critical content is rendered
+  const LOAD_DELAY_MS = 3000;           // Wait 3 seconds after page load
   const STAGGER_MS = 200;               // Slower stagger to reduce impact
   const IO_ROOT_MARGIN = '100px 0px';  // Only load when very close to viewport
 
@@ -159,8 +159,10 @@ document.addEventListener("DOMContentLoaded", () => {
     viewer.style.width = '100%';
     viewer.style.height = '100%';
     viewer.style.display = 'block';
-    viewer.style.visibility = 'visible';
-    viewer.style.opacity = '1';
+    viewer.style.visibility = 'hidden';
+    viewer.style.opacity = '0';
+    viewer.style.transform = 'translateY(20px)';
+    viewer.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
     
     // Add performance hints for LCP optimization
     viewer.setAttribute('fetchpriority', 'high');
@@ -171,13 +173,21 @@ document.addEventListener("DOMContentLoaded", () => {
     // Wait for Spline to actually load before crossfade
     viewer.addEventListener('load', () => {
       console.log('Spline viewer loaded successfully');
-      // Hide the preloader
+      
+      // Perfect synchronization: Hide preloader first, then show Spline
       hideSplinePreloader(container);
-      // Immediate crossfade - no delay for perfect sync
-      container.classList.add('spline-loaded');
-      console.log('Added spline-loaded class');
-      console.log('Container classes:', container.className);
-      console.log('Container has spline-loaded:', container.classList.contains('spline-loaded'));
+      
+      // Small delay to ensure preloader is hidden before showing Spline
+      setTimeout(() => {
+        // Show Spline with fade-from-below effect
+        viewer.style.visibility = 'visible';
+        viewer.style.opacity = '1';
+        viewer.style.transform = 'translateY(0)';
+        
+        // Mark as loaded
+        container.classList.add('spline-loaded');
+        console.log('Added spline-loaded class');
+      }, 100); // Small delay for perfect sync
     });
 
     // Fallback: Apply class after 2.5 seconds (shorter timeout)
@@ -186,7 +196,14 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log('Fallback: Adding spline-loaded class after 2.5s timeout');
         // Hide the preloader on fallback too
         hideSplinePreloader(container);
-        container.classList.add('spline-loaded');
+        
+        // Show Spline with fade-from-below effect
+        setTimeout(() => {
+          viewer.style.visibility = 'visible';
+          viewer.style.opacity = '1';
+          viewer.style.transform = 'translateY(0)';
+          container.classList.add('spline-loaded');
+        }, 100);
       }
     }, 2500);
 
