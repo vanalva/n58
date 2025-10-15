@@ -199,6 +199,18 @@ html.async-hide * {
   transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ✅ Lottie Container Sizing - Prevent clipping */
+[data-lottie] {
+  overflow: visible !important;
+  position: relative;
+}
+
+[data-lottie] svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* ✅ Nugros Custom Fonts (loaded at end to prevent render blocking) */
 @font-face {
   font-family: 'Nugros';
