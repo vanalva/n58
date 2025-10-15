@@ -7,12 +7,10 @@ document.addEventListener("DOMContentLoaded", () => {
   
   console.log(`Found ${splineContainers.length} Spline containers`);
 
-  // Tuning knobs - Mobile performance optimized
-  const MIN_DELAY_AFTER_LCP_MS = 1200;  // Wait longer after LCP
-  const QUIET_WINDOW_MS = 500;          // Longer quiet window
-  const QUIET_TIMEOUT_MS = 5000;        // Longer timeout to reduce main thread work
-  const STAGGER_MS = 300;               // Slower stagger to reduce load
-  const IO_ROOT_MARGIN = '150px 0px';   // Load closer to viewport
+  // Simplified timing - no complex LCP waiting
+  const LOAD_DELAY_MS = 2000;           // Simple delay after page load
+  const STAGGER_MS = 100;               // Faster stagger
+  const IO_ROOT_MARGIN = '300px 0px';   // Start loading earlier
 
   let splineScriptLoaded = false;
   let scriptLoading = null;
@@ -132,34 +130,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  // Simple delay after page load - no complex LCP waiting
   const whenReady = new Promise((resolve) => {
-    let resolved = false;
-    const safeResolve = () => {
-      if (resolved) return;
-      resolved = true;
-      // Enforce minimum extra delay after LCP
-      setTimeout(resolve, MIN_DELAY_AFTER_LCP_MS);
-    };
-
-    try {
-      const po = new PerformanceObserver((list) => {
-        const entries = list.getEntries();
-        if (!entries.length) return;
-        if ('requestIdleCallback' in window) {
-          requestIdleCallback(safeResolve, { timeout: 800 });
-        } else {
-          setTimeout(safeResolve, 800);
-        }
-        po.disconnect();
-      });
-      po.observe({ type: 'largest-contentful-paint', buffered: true });
-
-      window.addEventListener('load', () => setTimeout(safeResolve, 1000));
-      setTimeout(safeResolve, 2000);
-    } catch (e) {
-      window.addEventListener('load', () => setTimeout(safeResolve, 1000));
-      setTimeout(safeResolve, 2000);
-    }
+    window.addEventListener('load', () => {
+      setTimeout(resolve, LOAD_DELAY_MS);
+    });
+    // Fallback timeout
+    setTimeout(resolve, LOAD_DELAY_MS + 1000);
   });
 
   // Wait until the main thread has been quiet for a bit (no long tasks)
@@ -212,12 +189,10 @@ document.addEventListener("DOMContentLoaded", () => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
       const myIndex = initIndex++;
-      whenReady
-        .then(() => waitForMainThreadQuiet())
-        .then(() => {
-          const run = () => startForContainer(entry.target);
-          setTimeout(run, myIndex * STAGGER_MS);
-        });
+      whenReady.then(() => {
+        const run = () => startForContainer(entry.target);
+        setTimeout(run, myIndex * STAGGER_MS);
+      });
       io.unobserve(entry.target);
     });
   }, { root: null, rootMargin: IO_ROOT_MARGIN, threshold: 0.1 });

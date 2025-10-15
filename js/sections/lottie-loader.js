@@ -2,12 +2,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const lottieContainers = document.querySelectorAll('[data-lottie]');
   if (!lottieContainers.length) return;
 
-  // Tuning knobs - Mobile performance optimized
-  const MIN_DELAY_AFTER_LCP_MS = 800;   // Wait longer after LCP
-  const QUIET_WINDOW_MS = 400;          // Longer quiet window
-  const QUIET_TIMEOUT_MS = 4000;        // Longer timeout to reduce main thread work
-  const STAGGER_MS = 200;               // Slower stagger to reduce load
-  const IO_ROOT_MARGIN = '200px 0px';   // Load closer to viewport
+  // Optimized timing for smooth Lottie playback
+  const LOAD_DELAY_MS = 1000;           // Faster loading
+  const STAGGER_MS = 50;                // Minimal stagger
+  const IO_ROOT_MARGIN = '500px 0px';    // Load earlier to avoid stutter
 
   let scriptLoading = null;
 
@@ -19,8 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const script = document.createElement('script');
       script.src = 'https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.2/lottie.min.js';
       script.async = true;
-      script.onload = resolve;
-      document.body.appendChild(script);
+      script.defer = true;
+      
+      // Small delay to let script settle before resolving
+      script.onload = () => setTimeout(resolve, 50);
+      document.head.appendChild(script);
     });
 
     return scriptLoading;
@@ -42,7 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
       autoplay: true,
       path: jsonURL,
       rendererSettings: {
-        progressiveLoad: true
+        progressiveLoad: true,
+        preserveAspectRatio: 'xMidYMid slice',
+        hideOnTransparent: true
       }
     });
 
@@ -72,48 +75,30 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Trigger transition on next frames
-    requestAnimationFrame(() => {
+    // Smooth initialization - wait for first frame before marking as ready
+    anim.addEventListener('DOMLoaded', () => {
+      container.__lottieAnimation = anim;
+      
+      // Trigger transition on next frames
       requestAnimationFrame(() => {
-        container.classList.add('lottie-enter-active');
-        container.classList.remove('lottie-enter');
+        requestAnimationFrame(() => {
+          container.classList.add('lottie-enter-active');
+          container.classList.remove('lottie-enter');
+        });
       });
+      
+      container.__lottieInitialized = true;
     });
-
-    container.__lottieInitialized = true;
   };
 
   // Gate: wait for LCP (Largest Contentful Paint) + brief idle window.
+  // Simple delay after page load - no complex LCP waiting
   const whenReady = new Promise((resolve) => {
-    let resolved = false;
-    const safeResolve = () => {
-      if (resolved) return;
-      resolved = true;
-      // Enforce minimum extra delay after LCP
-      setTimeout(resolve, MIN_DELAY_AFTER_LCP_MS);
-    };
-
-    try {
-      const po = new PerformanceObserver((list) => {
-        const entries = list.getEntries();
-        if (!entries.length) return;
-        if ('requestIdleCallback' in window) {
-          requestIdleCallback(safeResolve, { timeout: 800 });
-        } else {
-          setTimeout(safeResolve, 800);
-        }
-        po.disconnect();
-      });
-      po.observe({ type: 'largest-contentful-paint', buffered: true });
-
-      // Backstops if LCP doesn't fire
-      window.addEventListener('load', () => setTimeout(safeResolve, 1000));
-      setTimeout(safeResolve, 2000);
-    } catch (e) {
-      // Older browsers: fall back
-      window.addEventListener('load', () => setTimeout(safeResolve, 1000));
-      setTimeout(safeResolve, 2000);
-    }
+    window.addEventListener('load', () => {
+      setTimeout(resolve, LOAD_DELAY_MS);
+    });
+    // Fallback timeout
+    setTimeout(resolve, LOAD_DELAY_MS + 1000);
   });
 
   // Wait until the main thread has been quiet for a bit (no long tasks)
@@ -156,19 +141,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!entry.isIntersecting) return;
 
       const myIndex = initIndex++;
-      whenReady
-        .then(() => waitForMainThreadQuiet())
-        .then(() => {
-          const start = () => loadLottieScript().then(() => initOneLottie(entry.target));
-          const schedule = () => {
-            if ('requestIdleCallback' in window) {
-              requestIdleCallback(start);
-            } else {
-              setTimeout(start, 300);
-            }
-          };
-          setTimeout(schedule, myIndex * STAGGER_MS);
-        });
+      whenReady.then(() => {
+        const start = () => loadLottieScript().then(() => initOneLottie(entry.target));
+        setTimeout(start, myIndex * STAGGER_MS);
+      });
 
       io.unobserve(entry.target);
     });

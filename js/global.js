@@ -69,17 +69,13 @@ function initPageLoader() {
         }, 300);
     };
     
-    // Hide loader when page is fully loaded
-    window.addEventListener('load', hideLoader);
-    
-    // Fallback: Hide after DOM is ready (faster)
-    document.addEventListener('DOMContentLoaded', () => {
-        // Wait a bit for critical resources to load
-        setTimeout(hideLoader, 1000);
+    // Single, simple loader hide logic
+    window.addEventListener('load', () => {
+        setTimeout(hideLoader, 500);
     });
     
-    // Emergency fallback: Hide after 3 seconds max
-    setTimeout(hideLoader, 3000);
+    // Fallback: Hide after 2 seconds max
+    setTimeout(hideLoader, 2000);
 }
 
 function initCustomCursor() {
