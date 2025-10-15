@@ -1,5 +1,13 @@
 /* global.js — loaded on all pages */
 
+// ✅ Intellimize Anti-Flicker Fix
+// Immediately remove anti-flicker classes if present
+document.documentElement.classList.remove('anti-flicker', 'async-hide');
+// Run again once DOM is ready (in case Intellimize re-applies)
+document.addEventListener('DOMContentLoaded', () => {
+  document.documentElement.classList.remove('anti-flicker', 'async-hide');
+});
+
 // ✅ Initialize page loader immediately (before DOM ready)
 initPageLoader();
 

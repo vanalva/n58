@@ -1,5 +1,15 @@
 /* === GLOBAL STYLES === */
 
+/* ✅ Intellimize Anti-Flicker Fix */
+html.anti-flicker,
+html.anti-flicker *,
+html.async-hide,
+html.async-hide * {
+  visibility: visible !important;
+  opacity: 1 !important;
+  transition: none !important;
+}
+
 /* ✅ Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 7px;
