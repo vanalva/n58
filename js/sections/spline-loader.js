@@ -2,10 +2,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const splineContainers = document.querySelectorAll('[data-spline]');
   if (!splineContainers.length) return;
 
-  // Load Spline after critical content is rendered
-  const LOAD_DELAY_MS = 3000;           // Wait 3 seconds after page load
-  const STAGGER_MS = 200;               // Slower stagger to reduce impact
-  const IO_ROOT_MARGIN = '100px 0px';  // Only load when very close to viewport
+  // Load Spline immediately when visible - no artificial delays
+  const LOAD_DELAY_MS = 0;              // No delay - load immediately
+  const STAGGER_MS = 50;                // Minimal stagger
+  const IO_ROOT_MARGIN = '300px 0px';  // Load when approaching viewport
 
   let splineScriptLoaded = false;
   let scriptLoading = null;
@@ -174,16 +174,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
     container.appendChild(viewer);
     
-    // Track real Spline loading progress
+    // Track real Spline loading progress with fallback simulation
+    let progressSimulation = null;
+    let realProgressReceived = false;
+    
+    // Start progress simulation immediately (fallback)
+    const startProgressSimulation = () => {
+      let simulatedProgress = 0;
+      progressSimulation = setInterval(() => {
+        if (realProgressReceived) return; // Stop if real progress is received
+        
+        simulatedProgress += Math.random() * 8 + 2; // 2-10% increments
+        if (simulatedProgress > 85) simulatedProgress = 85; // Cap at 85%
+        
+        updateSplineProgress(container, simulatedProgress);
+        console.log(`Simulated Spline progress: ${Math.round(simulatedProgress)}%`);
+      }, 200);
+    };
+    
+    startProgressSimulation();
+    
+    // Try to track real Spline loading progress
     viewer.addEventListener('progress', (event) => {
+      realProgressReceived = true;
+      if (progressSimulation) {
+        clearInterval(progressSimulation);
+        progressSimulation = null;
+      }
+      
       const progress = event.detail.progress * 100; // Convert to percentage
-      console.log(`Spline loading progress: ${progress}%`);
+      console.log(`Real Spline loading progress: ${progress}%`);
       updateSplineProgress(container, progress);
     });
     
     // Wait for Spline to actually load before crossfade
     viewer.addEventListener('load', () => {
       console.log('Spline viewer loaded successfully');
+      
+      // Clean up progress simulation
+      if (progressSimulation) {
+        clearInterval(progressSimulation);
+        progressSimulation = null;
+      }
       
       // Update to 100% before hiding
       updateSplineProgress(container, 100);
@@ -204,10 +236,17 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 100); // Small delay for perfect sync
     });
 
-    // Fallback: Apply class after 5 seconds (longer timeout for real loading)
+    // Fallback: Apply class after 2 seconds (reasonable timeout)
     setTimeout(() => {
       if (!container.classList.contains('spline-loaded')) {
-        console.log('Fallback: Adding spline-loaded class after 5s timeout');
+        console.log('Fallback: Adding spline-loaded class after 2s timeout');
+        
+        // Clean up progress simulation
+        if (progressSimulation) {
+          clearInterval(progressSimulation);
+          progressSimulation = null;
+        }
+        
         // Update to 100% on fallback
         updateSplineProgress(container, 100);
         // Hide the preloader on fallback too
@@ -221,7 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
           container.classList.add('spline-loaded');
         }, 100);
       }
-    }, 5000);
+    }, 2000);
 
 
     // Add error handling
@@ -286,18 +325,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const startForContainer = (container) => {
     if (!shouldLoadSpline()) return;
     
-    // Load Spline ONLY when user scrolls to it or after long delay
-    whenReady.then(() => {
-      const run = () => loadSplineViewerScript().then(() => injectOneSpline(container));
-      
-      // Use requestIdleCallback with longer timeout - only load when truly idle
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(run, { timeout: 10000 }); // 10 second timeout
-      } else {
-        // Fallback: wait much longer
-        setTimeout(run, 2000);
-      }
-    });
+    // Load Spline immediately when visible - no delays
+    loadSplineViewerScript().then(() => injectOneSpline(container));
   };
 
   let initIndex = 0;
@@ -308,15 +337,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const container = entry.target;
       if (container.__splineInitialized) return;
       
-      // Only start loading when container is actually visible
+      // Start loading immediately with minimal stagger
       const myIndex = initIndex++;
-      whenReady.then(() => {
-        const run = () => startForContainer(container);
-        setTimeout(run, myIndex * STAGGER_MS);
-      });
+      setTimeout(() => startForContainer(container), myIndex * STAGGER_MS);
       io.unobserve(container);
     });
-  }, { root: null, rootMargin: IO_ROOT_MARGIN, threshold: 0.5 }); // Higher threshold - only when 50% visible
+  }, { root: null, rootMargin: IO_ROOT_MARGIN, threshold: 0.1 });
 
   splineContainers.forEach((el) => io.observe(el));
 
