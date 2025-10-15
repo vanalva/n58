@@ -8,29 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.documentElement.classList.remove('anti-flicker', 'async-hide');
 });
 
-// ✅ Performance Hints
-// Add preconnect hints for critical origins
-function addResourceHints() {
-  const hints = [
-    { rel: 'preconnect', href: 'https://n58.pages.dev', crossorigin: true },
-    { rel: 'preconnect', href: 'https://cdn.prod.website-files.com', crossorigin: true },
-    { rel: 'preconnect', href: 'https://cdnjs.cloudflare.com', crossorigin: true },
-    { rel: 'dns-prefetch', href: '//prod.spline.design' },
-    { rel: 'dns-prefetch', href: '//unpkg.com' },
-    { rel: 'dns-prefetch', href: '//cdn.jsdelivr.net' }
-  ];
-  
-  hints.forEach(hint => {
-    const link = document.createElement('link');
-    link.rel = hint.rel;
-    link.href = hint.href;
-    if (hint.crossorigin) link.crossOrigin = 'anonymous';
-    document.head.appendChild(link);
-  });
-}
-
-// Add hints immediately
-addResourceHints();
+// ✅ Resource hints are now handled in Webflow head code
+// Removed duplicate dynamic hints to prevent race conditions
 
 // ✅ Initialize page loader immediately (before DOM ready)
 initPageLoader();
