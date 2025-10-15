@@ -2,6 +2,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const lottieContainers = document.querySelectorAll('[data-lottie]');
   if (!lottieContainers.length) return;
 
+  // Defer Lottie loading - load after critical content
+  const LOTTIE_DELAY_MS = 6000;  // Wait 6 seconds after page load
+  const IO_ROOT_MARGIN = '100px 0px';  // Only load when very close
+
   let scriptLoading = null;
   let lottieReady = false;
 
@@ -89,22 +93,46 @@ document.addEventListener('DOMContentLoaded', () => {
     if (lottieReady) return;
     lottieReady = true;
 
-    // Load script first
-    loadLottieScript().then(() => {
-      // Set up intersection observer for all containers
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !entry.target.__lottieInitialized) {
-            initOneLottie(entry.target);
-            io.unobserve(entry.target);
-          }
-        });
-      }, { rootMargin: '100px 0px', threshold: 0.1 });
-
-      // Observe all containers
-      lottieContainers.forEach((container) => {
-        io.observe(container);
+    // Wait for page to be fully loaded and idle before loading Lottie
+    const whenReady = new Promise((resolve) => {
+      window.addEventListener('load', () => {
+        setTimeout(resolve, LOTTIE_DELAY_MS);
       });
+      // Fallback timeout
+      setTimeout(resolve, LOTTIE_DELAY_MS + 2000);
+    });
+
+    whenReady.then(() => {
+      // Load script only when truly idle
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => {
+          loadLottieScript().then(() => {
+            setupIntersectionObserver();
+          });
+        }, { timeout: 8000 });
+      } else {
+        setTimeout(() => {
+          loadLottieScript().then(() => {
+            setupIntersectionObserver();
+          });
+        }, 2000);
+      }
+    });
+  };
+
+  const setupIntersectionObserver = () => {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !entry.target.__lottieInitialized) {
+          initOneLottie(entry.target);
+          io.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: IO_ROOT_MARGIN, threshold: 0.5 }); // Higher threshold
+
+    // Observe all containers
+    lottieContainers.forEach((container) => {
+      io.observe(container);
     });
   };
 
