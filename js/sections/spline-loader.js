@@ -34,7 +34,11 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const createSplinePreloader = (container) => {
-    // Create a mini preloader for this specific Spline
+    // Get the container's background color for the preloader
+    const computedStyle = window.getComputedStyle(container);
+    const containerBgColor = computedStyle.backgroundColor || 'transparent';
+    
+    // Create a mini preloader using the same design as main preloader
     const preloader = document.createElement('div');
     preloader.className = 'spline-preloader';
     preloader.innerHTML = `
@@ -46,14 +50,13 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
     
-    // Style the preloader
+    // Style the preloader - NO background, just overlay
     preloader.style.cssText = `
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -65,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const content = preloader.querySelector('.spline-preloader-content');
     content.style.cssText = `
       text-align: center;
-      color: white;
       font-family: 'Nugros', sans-serif;
     `;
     
@@ -79,10 +81,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const bar = preloader.querySelector('.spline-preloader-bar');
     bar.style.cssText = `
       width: 200px;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 2px;
+      height: 16px;
+      background: transparent;
+      border: 2px solid var(--te-quiero-verde);
+      border-radius: 0;
       overflow: hidden;
+      position: relative;
     `;
     
     const fill = preloader.querySelector('.spline-preloader-fill');
@@ -90,8 +94,11 @@ document.addEventListener("DOMContentLoaded", () => {
       width: 0%;
       height: 100%;
       background: var(--te-quiero-verde);
-      border-radius: 2px;
+      border-radius: 0;
       transition: width 0.3s ease;
+      position: absolute;
+      top: 0;
+      left: 0;
     `;
     
     // Animate the progress bar
@@ -140,10 +147,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log(`Injecting Spline viewer with URL: ${sceneURL}`);
     console.log('Container computed styles:', window.getComputedStyle(container));
-    
-    // Show preloader for this specific Spline
-    const preloader = createSplinePreloader(container);
-    container.appendChild(preloader);
     
     const viewer = document.createElement('spline-viewer');
     viewer.setAttribute('url', sceneURL);
@@ -298,5 +301,13 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   window.addEventListener('resize', handleResize);
+
+  // Show preloaders immediately for all Spline containers
+  splineContainers.forEach(container => {
+    if (shouldLoadSpline()) {
+      const preloader = createSplinePreloader(container);
+      container.appendChild(preloader);
+    }
+  });
 });
   
