@@ -91,31 +91,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load script first
     loadLottieScript().then(() => {
-      // Start all visible Lotties immediately
-      lottieContainers.forEach((container) => {
-        const rect = container.getBoundingClientRect();
-        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-        
-        if (isVisible) {
-          initOneLottie(container);
-        }
-      });
-
-      // Set up intersection observer for remaining ones
+      // Set up intersection observer for all containers
       const io = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && !entry.target.__lottieInitialized) {
             initOneLottie(entry.target);
             io.unobserve(entry.target);
           }
         });
       }, { rootMargin: '100px 0px', threshold: 0.1 });
 
-      // Observe containers that weren't immediately visible
+      // Observe all containers
       lottieContainers.forEach((container) => {
-        if (!container.__lottieInitialized) {
-          io.observe(container);
-        }
+        io.observe(container);
       });
     });
   };
