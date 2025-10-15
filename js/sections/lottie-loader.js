@@ -2,12 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const lottieContainers = document.querySelectorAll('[data-lottie]');
   if (!lottieContainers.length) return;
 
-  // Optimized timing for smooth Lottie playback
-  const LOAD_DELAY_MS = 1000;           // Faster loading
-  const STAGGER_MS = 50;                // Minimal stagger
-  const IO_ROOT_MARGIN = '500px 0px';    // Load earlier to avoid stutter
-
   let scriptLoading = null;
+  let lottieReady = false;
 
   const loadLottieScript = () => {
     if (window.lottie) return Promise.resolve();
@@ -18,9 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
       script.src = 'https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.2/lottie.min.js';
       script.async = true;
       script.defer = true;
-      
-      // Small delay to let script settle before resolving
-      script.onload = () => setTimeout(resolve, 50);
+      script.onload = () => resolve();
       document.head.appendChild(script);
     });
 
@@ -91,64 +85,51 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // Gate: wait for LCP (Largest Contentful Paint) + brief idle window.
-  // Simple delay after page load - no complex LCP waiting
-  const whenReady = new Promise((resolve) => {
-    window.addEventListener('load', () => {
-      setTimeout(resolve, LOAD_DELAY_MS);
-    });
-    // Fallback timeout
-    setTimeout(resolve, LOAD_DELAY_MS + 1000);
-  });
+  const startLottieLoading = () => {
+    if (lottieReady) return;
+    lottieReady = true;
 
-  // Wait until the main thread has been quiet for a bit (no long tasks)
-  const waitForMainThreadQuiet = (quietWindowMs = QUIET_WINDOW_MS, timeoutMs = QUIET_TIMEOUT_MS) => {
-    return new Promise((resolve) => {
-      let lastLongTaskAt = performance.now();
-      let po = null;
-      try {
-        po = new PerformanceObserver(() => {
-          lastLongTaskAt = performance.now();
-        });
-        po.observe({ type: 'longtask', buffered: true });
-      } catch (_) {
-        // Long Tasks API not supported; resolve after quietWindowMs
-        setTimeout(resolve, quietWindowMs);
-        return;
-      }
-
-      const interval = setInterval(() => {
-        if (performance.now() - lastLongTaskAt >= quietWindowMs) {
-          clearInterval(interval);
-          clearTimeout(timeout);
-          if (po) po.disconnect();
-          resolve();
+    // Load script first
+    loadLottieScript().then(() => {
+      // Start all visible Lotties immediately
+      lottieContainers.forEach((container) => {
+        const rect = container.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+        
+        if (isVisible) {
+          initOneLottie(container);
         }
-      }, 200);
+      });
 
-      const timeout = setTimeout(() => {
-        clearInterval(interval);
-        if (po) po.disconnect();
-        resolve();
-      }, timeoutMs);
+      // Set up intersection observer for remaining ones
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            initOneLottie(entry.target);
+            io.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '100px 0px', threshold: 0.1 });
+
+      // Observe containers that weren't immediately visible
+      lottieContainers.forEach((container) => {
+        if (!container.__lottieInitialized) {
+          io.observe(container);
+        }
+      });
     });
   };
 
-  // Only init when near viewport, after the "ready" gate
-  let initIndex = 0;
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
+  // Start Lottie loading immediately when preloader finishes
+  const checkPreloaderFinished = () => {
+    if (document.body.classList.contains('loaded')) {
+      startLottieLoading();
+    } else {
+      // Check again in 50ms
+      setTimeout(checkPreloaderFinished, 50);
+    }
+  };
 
-      const myIndex = initIndex++;
-      whenReady.then(() => {
-        const start = () => loadLottieScript().then(() => initOneLottie(entry.target));
-        setTimeout(start, myIndex * STAGGER_MS);
-      });
-
-      io.unobserve(entry.target);
-    });
-  }, { root: null, rootMargin: IO_ROOT_MARGIN, threshold: 0.15 });
-
-  lottieContainers.forEach((el) => io.observe(el));
+  // Start checking immediately
+  checkPreloaderFinished();
 });
