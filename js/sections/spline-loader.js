@@ -77,6 +77,10 @@ document.addEventListener("DOMContentLoaded", () => {
     viewer.style.display = 'block';
     viewer.style.visibility = 'visible';
     viewer.style.opacity = '1';
+    
+    // Add performance hints for LCP optimization
+    viewer.setAttribute('fetchpriority', 'high');
+    viewer.setAttribute('loading', 'eager');
 
     container.appendChild(viewer);
     
