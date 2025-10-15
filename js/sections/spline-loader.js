@@ -2,10 +2,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const splineContainers = document.querySelectorAll('[data-spline]');
   if (!splineContainers.length) return;
 
-  // Simplified timing - no complex LCP waiting
-  const LOAD_DELAY_MS = 2000;           // Simple delay after page load
-  const STAGGER_MS = 100;               // Faster stagger
-  const IO_ROOT_MARGIN = '300px 0px';   // Start loading earlier
+  // Load Spline MUCH later - after critical content is rendered
+  const LOAD_DELAY_MS = 8000;           // Wait 8 seconds after page load
+  const STAGGER_MS = 200;               // Slower stagger to reduce impact
+  const IO_ROOT_MARGIN = '100px 0px';  // Only load when very close to viewport
 
   let splineScriptLoaded = false;
   let scriptLoading = null;
@@ -148,12 +148,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const startForContainer = (container) => {
     if (!shouldLoadSpline()) return;
+    
+    // Load Spline ONLY when user scrolls to it or after long delay
     whenReady.then(() => {
       const run = () => loadSplineViewerScript().then(() => injectOneSpline(container));
+      
+      // Use requestIdleCallback with longer timeout - only load when truly idle
       if ('requestIdleCallback' in window) {
-        requestIdleCallback(run, { timeout: 2000 });
+        requestIdleCallback(run, { timeout: 10000 }); // 10 second timeout
       } else {
-        setTimeout(run, 300);
+        // Fallback: wait much longer
+        setTimeout(run, 2000);
       }
     });
   };
@@ -162,14 +167,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const io = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
+      
+      const container = entry.target;
+      if (container.__splineInitialized) return;
+      
+      // Only start loading when container is actually visible
       const myIndex = initIndex++;
       whenReady.then(() => {
-        const run = () => startForContainer(entry.target);
+        const run = () => startForContainer(container);
         setTimeout(run, myIndex * STAGGER_MS);
       });
-      io.unobserve(entry.target);
+      io.unobserve(container);
     });
-  }, { root: null, rootMargin: IO_ROOT_MARGIN, threshold: 0.1 });
+  }, { root: null, rootMargin: IO_ROOT_MARGIN, threshold: 0.5 }); // Higher threshold - only when 50% visible
 
   splineContainers.forEach((el) => io.observe(el));
 
