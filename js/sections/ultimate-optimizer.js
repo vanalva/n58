@@ -24,11 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
   
-  // Defer non-critical CSS
+  // Defer non-critical CSS (only your custom CSS files)
   const deferNonCriticalCSS = () => {
     const nonCriticalCSS = [
-      'css/sections/cambio-marquee.css',
-      'css/static/inicio.css'
+      'cambio-marquee.css',
+      'inicio.css'
     ];
     
     nonCriticalCSS.forEach(cssFile => {
@@ -149,6 +149,17 @@ document.addEventListener('DOMContentLoaded', () => {
       splineContainers.forEach(container => {
         container.style.contentVisibility = 'auto';
         container.style.containIntrinsicSize = '50vh';
+      });
+      
+      // Optimize all images for mobile
+      const allImages = document.querySelectorAll('img');
+      allImages.forEach(img => {
+        if (!img.hasAttribute('loading')) {
+          img.setAttribute('loading', 'lazy');
+        }
+        if (!img.hasAttribute('decoding')) {
+          img.setAttribute('decoding', 'async');
+        }
       });
       
       console.log('📱 Mobile images optimized');
