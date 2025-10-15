@@ -151,12 +151,47 @@
         
         async function loadAnalytics() {
             try {
-                // In a real implementation, you'd fetch from your API
-                // For demo purposes, we'll use mock data
-                analyticsData = generateMockData();
+                // Try to fetch from API first
+                const response = await fetch('/api/analytics');
+                const apiData = await response.json();
+                
+                // Also get data from localStorage
+                const localData = getFromLocalStorage();
+                
+                // Combine both data sources
+                analyticsData = [...apiData, ...localData];
+                
+                // If no data from either source, use mock data for demo
+                if (analyticsData.length === 0) {
+                    analyticsData = generateMockData();
+                }
+                
                 updateDashboard();
             } catch (error) {
                 console.error('Error loading analytics:', error);
+                
+                // Fallback to localStorage only
+                try {
+                    analyticsData = getFromLocalStorage();
+                    if (analyticsData.length === 0) {
+                        analyticsData = generateMockData();
+                    }
+                    updateDashboard();
+                } catch (localError) {
+                    console.error('Error reading localStorage:', localError);
+                    analyticsData = generateMockData();
+                    updateDashboard();
+                }
+            }
+        }
+        
+        function getFromLocalStorage() {
+            try {
+                const data = JSON.parse(localStorage.getItem('n58_analytics') || '[]');
+                return data;
+            } catch (error) {
+                console.error('Error reading analytics from localStorage:', error);
+                return [];
             }
         }
         

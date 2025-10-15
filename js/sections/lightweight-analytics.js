@@ -311,11 +311,49 @@
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(dataToSend)
+    }).then(response => {
+      if (response.ok) {
+        if (CONFIG.LOG_ACTIVITY) {
+          console.log('📤 Analytics data sent successfully');
+        }
+      } else {
+        console.error('Failed to send analytics data:', response.status);
+        // Store in localStorage as backup
+        storeInLocalStorage(dataToSend.events);
+      }
     }).catch(error => {
       if (CONFIG.LOG_ACTIVITY) {
         console.log('📊 Analytics send failed:', error);
       }
+      // Store in localStorage as backup
+      storeInLocalStorage(dataToSend.events);
     });
+  }
+  
+  // Store analytics data in localStorage as backup
+  function storeInLocalStorage(events) {
+    try {
+      const existingData = JSON.parse(localStorage.getItem('n58_analytics') || '[]');
+      existingData.push(...events);
+      localStorage.setItem('n58_analytics', JSON.stringify(existingData));
+      
+      if (CONFIG.LOG_ACTIVITY) {
+        console.log('💾 Analytics data stored in localStorage:', events.length, 'events');
+      }
+    } catch (error) {
+      console.error('Error storing analytics in localStorage:', error);
+    }
+  }
+  
+  // Get analytics data from localStorage
+  function getFromLocalStorage() {
+    try {
+      const data = JSON.parse(localStorage.getItem('n58_analytics') || '[]');
+      return data;
+    } catch (error) {
+      console.error('Error reading analytics from localStorage:', error);
+      return [];
+    }
   }
   
   // Initialize analytics
