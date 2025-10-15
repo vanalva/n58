@@ -33,6 +33,93 @@ document.addEventListener("DOMContentLoaded", () => {
     return scriptLoading;
   };
 
+  const createSplinePreloader = (container) => {
+    // Create a mini preloader for this specific Spline
+    const preloader = document.createElement('div');
+    preloader.className = 'spline-preloader';
+    preloader.innerHTML = `
+      <div class="spline-preloader-content">
+        <div class="spline-preloader-text">Cargando experiencia 3D...</div>
+        <div class="spline-preloader-bar">
+          <div class="spline-preloader-fill"></div>
+        </div>
+      </div>
+    `;
+    
+    // Style the preloader
+    preloader.style.cssText = `
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      opacity: 1;
+      transition: opacity 0.5s ease-out;
+    `;
+    
+    const content = preloader.querySelector('.spline-preloader-content');
+    content.style.cssText = `
+      text-align: center;
+      color: white;
+      font-family: 'Nugros', sans-serif;
+    `;
+    
+    const text = preloader.querySelector('.spline-preloader-text');
+    text.style.cssText = `
+      font-size: 14px;
+      margin-bottom: 15px;
+      color: var(--te-quiero-verde);
+    `;
+    
+    const bar = preloader.querySelector('.spline-preloader-bar');
+    bar.style.cssText = `
+      width: 200px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      overflow: hidden;
+    `;
+    
+    const fill = preloader.querySelector('.spline-preloader-fill');
+    fill.style.cssText = `
+      width: 0%;
+      height: 100%;
+      background: var(--te-quiero-verde);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    `;
+    
+    // Animate the progress bar
+    let progress = 0;
+    const animateProgress = () => {
+      progress += Math.random() * 15;
+      if (progress > 90) progress = 90;
+      fill.style.width = progress + '%';
+      
+      if (progress < 90) {
+        setTimeout(animateProgress, 200 + Math.random() * 300);
+      }
+    };
+    animateProgress();
+    
+    return preloader;
+  };
+
+  const hideSplinePreloader = (container) => {
+    const preloader = container.querySelector('.spline-preloader');
+    if (preloader) {
+      preloader.style.opacity = '0';
+      setTimeout(() => {
+        preloader.remove();
+      }, 500);
+    }
+  };
+
   const injectOneSpline = (container) => {
     if (container.__splineInitialized) {
       console.log('Spline already initialized for container');
@@ -54,6 +141,10 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log(`Injecting Spline viewer with URL: ${sceneURL}`);
     console.log('Container computed styles:', window.getComputedStyle(container));
     
+    // Show preloader for this specific Spline
+    const preloader = createSplinePreloader(container);
+    container.appendChild(preloader);
+    
     const viewer = document.createElement('spline-viewer');
     viewer.setAttribute('url', sceneURL);
     viewer.style.width = '100%';
@@ -71,6 +162,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Wait for Spline to actually load before crossfade
     viewer.addEventListener('load', () => {
       console.log('Spline viewer loaded successfully');
+      // Hide the preloader
+      hideSplinePreloader(container);
       // Immediate crossfade - no delay for perfect sync
       container.classList.add('spline-loaded');
       console.log('Added spline-loaded class');
@@ -82,6 +175,8 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       if (!container.classList.contains('spline-loaded')) {
         console.log('Fallback: Adding spline-loaded class after 2.5s timeout');
+        // Hide the preloader on fallback too
+        hideSplinePreloader(container);
         container.classList.add('spline-loaded');
       }
     }, 2500);
