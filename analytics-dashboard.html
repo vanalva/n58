@@ -117,6 +117,10 @@
                 <div class="stat-number" id="uniqueUsers">0</div>
                 <div class="stat-label">Unique Users</div>
             </div>
+            <div class="stat-card">
+                <div class="stat-number" id="goalCompletions">0</div>
+                <div class="stat-label">Goal Completions</div>
+            </div>
         </div>
         
         <div class="chart-container">
@@ -179,11 +183,16 @@
             const totalInteractions = analyticsData.reduce((sum, session) => sum + session.interactions, 0);
             const uniqueUsers = new Set(analyticsData.map(session => session.userId)).size;
             
+            // Calculate goal completions
+            const allEvents = analyticsData.flatMap(session => session.events);
+            const goalCompletions = allEvents.filter(event => event.type === 'goal_completion').length;
+            
             // Update stats
             document.getElementById('totalSessions').textContent = totalSessions;
             document.getElementById('totalPageViews').textContent = totalPageViews;
             document.getElementById('totalInteractions').textContent = totalInteractions;
             document.getElementById('uniqueUsers').textContent = uniqueUsers;
+            document.getElementById('goalCompletions').textContent = goalCompletions;
             
             // Update events table
             updateEventsTable();

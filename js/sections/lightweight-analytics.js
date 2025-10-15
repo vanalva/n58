@@ -98,12 +98,54 @@
     }
   }
   
-  // Track button clicks
-  function trackButtonClicks() {
+  // Track specific goals (replaces Intellimize goals)
+  function trackSpecificGoals() {
     document.addEventListener('click', (event) => {
       const element = event.target;
+      const elementText = element.textContent?.toLowerCase() || '';
+      const elementId = element.id?.toLowerCase() || '';
+      const elementClass = element.className?.toLowerCase() || '';
       
-      // Track button clicks
+      // Goal 1: Onboarding Navbar
+      if (elementText.includes('onboarding') || 
+          elementId.includes('onboarding') ||
+          elementClass.includes('onboarding')) {
+        trackGoal('onboarding_navbar', element, event);
+      }
+      
+      // Goal 2: Banca en Linea Navbar
+      if (elementText.includes('banca') || 
+          elementText.includes('linea') ||
+          elementId.includes('banca') ||
+          elementClass.includes('banca')) {
+        trackGoal('banca_en_linea_navbar', element, event);
+      }
+      
+      // Goal 3: Onboarding Hero
+      if (elementText.includes('hero') || 
+          elementId.includes('hero') ||
+          elementClass.includes('hero') ||
+          element.closest('.hero-section')) {
+        trackGoal('onboarding_hero', element, event);
+      }
+      
+      // Goal 4: Chat Open
+      if (elementText.includes('chat') || 
+          elementText.includes('chatear') ||
+          elementId.includes('chat') ||
+          elementClass.includes('chat') ||
+          elementId === 'chatbot-trigger') {
+        trackGoal('chat_open', element, event);
+      }
+      
+      // Goal 5: Prueba (test button)
+      if (elementText.includes('prueba') || 
+          elementId.includes('prueba') ||
+          elementClass.includes('prueba')) {
+        trackGoal('prueba', element, event);
+      }
+      
+      // Track all other clicks
       if (element.tagName === 'BUTTON' || 
           element.classList.contains('button') ||
           element.classList.contains('notch-button') ||
@@ -123,6 +165,39 @@
         });
       }
     });
+  }
+  
+  // Track specific goal completion
+  function trackGoal(goalName, element, event) {
+    const goalData = {
+      type: 'goal_completion',
+      goalName: goalName,
+      element: {
+        tagName: element.tagName,
+        id: element.id,
+        className: element.className,
+        text: element.textContent?.substring(0, 100) || '',
+        href: element.href || '',
+        src: element.src || ''
+      },
+      position: {
+        x: event.clientX,
+        y: event.clientY
+      },
+      timestamp: Date.now(),
+      pageUrl: window.location.href,
+      goalValue: 1 // Each goal completion = 1 point
+    };
+    
+    analyticsData.events.push(goalData);
+    analyticsData.interactions++;
+    
+    if (CONFIG.LOG_ACTIVITY) {
+      console.log('🎯 Goal completed:', goalName, goalData.element);
+    }
+    
+    // Send goal completion immediately (high priority)
+    sendAnalyticsData(true);
   }
   
   // Track form interactions
@@ -253,7 +328,7 @@
     trackPageView();
     
     // Set up event tracking
-    trackButtonClicks();
+    trackSpecificGoals(); // Replaces trackButtonClicks() with goal tracking
     trackFormInteractions();
     trackScrollBehavior();
     trackTimeOnPage();
