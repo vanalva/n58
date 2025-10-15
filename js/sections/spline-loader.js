@@ -7,12 +7,12 @@ document.addEventListener("DOMContentLoaded", () => {
   
   console.log(`Found ${splineContainers.length} Spline containers`);
 
-  // Tuning knobs - Balanced for smooth loading without harsh black
-  const MIN_DELAY_AFTER_LCP_MS = 600;   // Slight delay to prioritize content
-  const QUIET_WINDOW_MS = 400;          // Shorter quiet window
-  const QUIET_TIMEOUT_MS = 3500;        // Faster timeout
-  const STAGGER_MS = 100;               // Faster stagger
-  const IO_ROOT_MARGIN = '400px 0px';   // Start loading earlier to avoid black space
+  // Tuning knobs - Mobile performance optimized
+  const MIN_DELAY_AFTER_LCP_MS = 1200;  // Wait longer after LCP
+  const QUIET_WINDOW_MS = 500;          // Longer quiet window
+  const QUIET_TIMEOUT_MS = 5000;        // Longer timeout to reduce main thread work
+  const STAGGER_MS = 300;               // Slower stagger to reduce load
+  const IO_ROOT_MARGIN = '150px 0px';   // Load closer to viewport
 
   let splineScriptLoaded = false;
   let scriptLoading = null;

@@ -2,12 +2,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const lottieContainers = document.querySelectorAll('[data-lottie]');
   if (!lottieContainers.length) return;
 
-  // Tuning knobs - Optimized for faster logo display
-  const MIN_DELAY_AFTER_LCP_MS = 200;   // Load sooner (logo is important)
-  const QUIET_WINDOW_MS = 300;          // Shorter wait
-  const QUIET_TIMEOUT_MS = 2000;        // Load faster if thread doesn't quiet
-  const STAGGER_MS = 80;                // Faster stagger
-  const IO_ROOT_MARGIN = '400px 0px';   // Start loading earlier
+  // Tuning knobs - Mobile performance optimized
+  const MIN_DELAY_AFTER_LCP_MS = 800;   // Wait longer after LCP
+  const QUIET_WINDOW_MS = 400;          // Longer quiet window
+  const QUIET_TIMEOUT_MS = 4000;        // Longer timeout to reduce main thread work
+  const STAGGER_MS = 200;               // Slower stagger to reduce load
+  const IO_ROOT_MARGIN = '200px 0px';   // Load closer to viewport
 
   let scriptLoading = null;
 
