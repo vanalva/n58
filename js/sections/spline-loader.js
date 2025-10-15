@@ -1,11 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const splineContainers = document.querySelectorAll('[data-spline]');
-  if (!splineContainers.length) {
-    console.log('No Spline containers found');
-    return;
-  }
-  
-  console.log(`Found ${splineContainers.length} Spline containers`);
+  if (!splineContainers.length) return;
 
   // Simplified timing - no complex LCP waiting
   const LOAD_DELAY_MS = 2000;           // Simple delay after page load
@@ -18,27 +13,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const shouldLoadSpline = () => window.innerWidth > 1024;
 
   const loadSplineViewerScript = () => {
-    if (splineScriptLoaded) {
-      console.log('Spline script already loaded');
-      return Promise.resolve();
-    }
-    if (scriptLoading) {
-      console.log('Spline script already loading');
-      return scriptLoading;
-    }
+    if (splineScriptLoaded) return Promise.resolve();
+    if (scriptLoading) return scriptLoading;
 
-    console.log('Loading Spline script...');
     scriptLoading = new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.type = 'module';
       script.src = 'https://unpkg.com/@splinetool/viewer@1.10.14/build/spline-viewer.js';
       script.onload = () => {
-        console.log('Spline script loaded successfully');
         splineScriptLoaded = true;
         resolve();
       };
       script.onerror = (error) => {
-        console.error('Failed to load Spline script:', error);
         reject(error);
       };
       document.body.appendChild(script);
@@ -100,24 +86,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }, 2500);
 
-    // Manual test: force crossfade after 3 seconds for debugging
-    setTimeout(() => {
-      console.log('Manual test: Forcing crossfade after 3s');
-      container.classList.add('spline-loaded');
-    }, 3000);
 
     // Add error handling
     viewer.addEventListener('error', (error) => {
       console.error('Spline viewer error:', error);
     });
 
-    // Debug after a delay to see if anything renders
-    setTimeout(() => {
-      console.log('Spline debug after 2s:');
-      console.log('- Container visible:', container.offsetWidth > 0 && container.offsetHeight > 0);
-      console.log('- Viewer visible:', viewer.offsetWidth > 0 && viewer.offsetHeight > 0);
-      console.log('- Viewer in DOM:', document.contains(viewer));
-    }, 2000);
 
     container.__splineInitialized = true;
   };
