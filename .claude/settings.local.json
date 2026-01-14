@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__webflow__webflow_guide_tool",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
+    ]
+  }
+}
