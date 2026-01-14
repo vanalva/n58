@@ -8,10 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.documentElement.classList.remove('anti-flicker', 'async-hide');
 });
 
-// ✅ Resource hints are now handled in Webflow head code
-// Removed duplicate dynamic hints to prevent race conditions
-
-// ✅ Initialize page loader immediately (before DOM ready)
+// ✅ Page loader hide logic (loader HTML is inline in Webflow)
 initPageLoader();
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -21,40 +18,24 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function initPageLoader() {
-    // Create loader HTML
-    const loaderHTML = `
-        <div id="n58-page-loader">
-            <div class="loader-content">
-                <div class="bar-container">
-                    <div class="bar-fill">
-                        <span class="bar-text">Cargando experiencia digital</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    // Inject loader immediately
-    document.body.insertAdjacentHTML('afterbegin', loaderHTML);
-    
-    // Hide loader function
+    // Loader HTML is now inline in Webflow - this just handles hiding it
     const hideLoader = () => {
         document.body.classList.add('loaded');
-        
+
         // Remove loader from DOM after fade out
         setTimeout(() => {
             const loader = document.getElementById('n58-page-loader');
             if (loader) loader.remove();
         }, 300);
     };
-    
-    // Single, simple loader hide logic
+
+    // Hide when page is fully loaded
     window.addEventListener('load', () => {
         setTimeout(hideLoader, 500);
     });
-    
-    // Fallback: Hide after 2 seconds max
-    setTimeout(hideLoader, 2000);
+
+    // Fallback: Hide after 3 seconds max
+    setTimeout(hideLoader, 3000);
 }
 
 function initCustomCursor() {
