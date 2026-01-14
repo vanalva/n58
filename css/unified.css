@@ -1,6 +1,23 @@
 /* === N58 UNIFIED CSS === */
 /* All styles in one file to eliminate render-blocking requests */
 
+/* CSS Variables - Ensures variables are always available */
+/* These are defined by Webflow, but we include them here as fallback */
+:root {
+  --caldito-de-pollo: #ffefe9;
+  --caldito-de-pollo-dark: #f5e4de;
+  --oro-negro: #1b2021;
+  --cola-de-langosta: #ef5541;
+  --gris: #828282;
+  --not-barbie: #b743ed;
+  --el-mostro-de-lavanda: #6035a5;
+  --te-quiero-verde: #a0dd52;
+  --hombre-invisible: #0000;
+  --obsidian: #1b2021e6;
+  --plastic: #ffefe9d9;
+  --not-barbie-light: #d7a2f4;
+}
+
 /* ✅ Intellimize Anti-Flicker Fix */
 html.anti-flicker,
 html.anti-flicker *,
@@ -212,37 +229,37 @@ html.async-hide * {
   display: block;
 }
 
-/* ✅ Nugros Custom Fonts (loaded at end to prevent render blocking) */
+/* ✅ Nugros Custom Fonts - using swap to ensure font always loads */
 @font-face {
   font-family: 'Nugros';
   font-weight: 400;
   font-style: normal;
-  font-display: optional;
-  src: url('https://n58.pages.dev/fonts/Nugros-Regular.woff2') format('woff2'), local('Arial');
+  font-display: swap;
+  src: url('https://n58.pages.dev/fonts/Nugros-Regular.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'Nugros';
   font-weight: 600;
   font-style: normal;
-  font-display: optional;
-  src: url('https://n58.pages.dev/fonts/Nugros-SemiBold.woff2') format('woff2'), local('Arial');
+  font-display: swap;
+  src: url('https://n58.pages.dev/fonts/Nugros-SemiBold.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'Nugros';
   font-weight: 700;
   font-style: normal;
-  font-display: optional;
-  src: url('https://n58.pages.dev/fonts/Nugros-Bold.woff2') format('woff2'), local('Arial');
+  font-display: swap;
+  src: url('https://n58.pages.dev/fonts/Nugros-Bold.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'Nugros';
   font-weight: 800;
   font-style: normal;
-  font-display: optional;
-  src: url('https://n58.pages.dev/fonts/Nugros-ExtraBold.woff2') format('woff2'), local('Arial');
+  font-display: swap;
+  src: url('https://n58.pages.dev/fonts/Nugros-ExtraBold.woff2') format('woff2');
 }
 
 /* ✅ Page Loader - Sleek Bar Style */
